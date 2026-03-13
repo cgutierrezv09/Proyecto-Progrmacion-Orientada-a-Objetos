@@ -11,10 +11,10 @@ public class Coleccionista extends Usuario{
 
 
     //Super constructor con los atributos agregados
-    public Coleccionista(String nombre, String apellido, LocalDate fechaNacimiento, int edad,
+    public Coleccionista(String nombre, String apellido, LocalDate fechaNacimiento,
                          String contraseña, String correo, int puntuacion, String direccion,
                          ArrayList<String> listInteres, ArrayList<String> objPropiedad) {
-        super(nombre, apellido, fechaNacimiento, edad, contraseña, correo);
+        super(nombre, apellido, fechaNacimiento, contraseña, correo);
         this.puntuacion = puntuacion;
         this.direccion = direccion;
         this.listInteres = listInteres;

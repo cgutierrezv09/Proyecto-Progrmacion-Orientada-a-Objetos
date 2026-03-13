@@ -8,18 +8,14 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private LocalDate fechaNacimiento; //variable para que el usuario ingrese la fecha de nacimiento
-    private final LocalDate hoy=LocalDate.now();  // varibale para determinar la fecha de hoy
-    private int edad= Period.between(fechaNacimiento,hoy).getYears();//variable que calcula la edad en base a la feche de nacimiento y de hoy
     private  String contraseña;
     private String correo;
 
     //constructor
-    public Usuario(String nombre, String apellido, LocalDate fechaNacimiento,
-                   int edad, String contraseña, String correo) {
+    public Usuario(String nombre, String apellido, LocalDate fechaNacimiento, String contraseña, String correo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.edad = edad;
         this.contraseña = contraseña;
         this.correo = correo;
     }
@@ -39,13 +35,6 @@ public class Usuario {
         return fechaNacimiento;
     }
 
-    public LocalDate getHoy() {
-        return hoy;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
 
     public String getContraseña() {
         return contraseña;
@@ -69,9 +58,7 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
+
 
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
@@ -79,5 +66,10 @@ public class Usuario {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    //metodo para calcular la edad
+    public int calcularEdad(){
+        return Period.between(fechaNacimiento,LocalDate.now()).getYears();
     }
 }

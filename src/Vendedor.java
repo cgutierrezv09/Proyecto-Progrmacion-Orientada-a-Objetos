@@ -7,9 +7,9 @@ public class Vendedor extends Usuario{
     private String direccion;
 
     //Super constructor con los atributos correspondientes del vendedor
-    public Vendedor(String nombre, String apellido, LocalDate fechaNacimiento, int edad,
+    public Vendedor(String nombre, String apellido, LocalDate fechaNacimiento,
                     String contraseña, String correo, int puntuacion, String direccion) {
-        super(nombre, apellido, fechaNacimiento, edad, contraseña, correo);
+        super(nombre, apellido, fechaNacimiento, contraseña, correo);
         this.puntuacion=puntuacion;
         this.direccion=direccion;
     }
