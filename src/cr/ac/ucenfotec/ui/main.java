@@ -1,3 +1,18 @@
+package cr.ac.ucenfotec.ui;
+
+import cr.ac.ucenfotec.logica.gestor.GestorSubastas;
+import cr.ac.ucenfotec.logica.modelo.*;
+//Leer datos
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+//Gestionar fechas y periodos de tiempo
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+//Guardar objetos y subastas localmente
+import java.util.ArrayList;
+
+
 public class main {
 
     public static void main(String[] args) throws IOException {
@@ -111,3 +126,8 @@ public class main {
                     break;
 
             }
+
+        } while (opcionElegida != 0);
+
+    }
+}
