@@ -2,7 +2,10 @@ package cr.ac.ucenfotec.ui;
 
 import cr.ac.ucenfotec.logica.gestor.GestorSubastas;
 import cr.ac.ucenfotec.logica.modelo.*;
-
+//Leer datos
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 //Gestionar fechas y periodos de tiempo
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,10 +16,9 @@ import java.util.Scanner;
 
 public class main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Scanner entrada = new Scanner(System.in);
-
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         GestorSubastas gestorSubastas = new GestorSubastas();
 
         int opcionElegida;
@@ -33,8 +35,7 @@ public class main {
             System.out.println("6. Listar Ofertas");
             System.out.println("0. Salir");
 
-            opcionElegida = entrada.nextInt();
-            entrada.nextLine();
+            opcionElegida = Integer.parseInt(input.readLine());
 
             switch (opcionElegida) {
 
@@ -47,18 +48,15 @@ public class main {
 
                     // Pide al usuario los datos por medio de consola
                     System.out.print("Precio Mínimo: ");
-                    double precioMinimo = entrada.nextDouble();
-                    entrada.nextLine();
+                    double precioMinimo = Double.parseDouble(input.readLine());
 
                     System.out.print("Días Hasta que Cierre la Subasta: ");
-                    int dias = entrada.nextInt();
-                    entrada.nextLine();
+                    int dias = Integer.parseInt(input.readLine());
 
                     LocalDateTime fechaVencimiento = LocalDateTime.now().plusDays(dias);
 
                     System.out.print("¿Cuántos Objetos Desea Agregar? ");
-                    int cantidadObjetos = entrada.nextInt();
-                    entrada.nextLine();
+                    int cantidadObjetos = Integer.parseInt(input.readLine());
 
                     ArrayList<Objeto> objetos = new ArrayList<>();
 
@@ -68,23 +66,22 @@ public class main {
                         System.out.println("\nObjeto Número " + (i + 1));
 
                         System.out.print("Nombre: ");
-                        String nombre = entrada.nextLine();
+                        String nombre = input.readLine();
 
                         System.out.print("Descripción: ");
-                        String descripcion = entrada.nextLine();
+                        String descripcion = input.readLine();
 
                         System.out.print("Estado: ");
-                        String estado = entrada.nextLine();
+                        String estado = input.readLine();
 
                         System.out.print("Año de Compra: ");
-                        int year = entrada.nextInt();
+                        int year = Integer.parseInt(input.readLine());
 
                         System.out.print("Mes de Compra: ");
-                        int mes = entrada.nextInt();
+                        int mes = Integer.parseInt(input.readLine());
 
                         System.out.print("Día de Compra: ");
-                        int dia = entrada.nextInt();
-                        entrada.nextLine();
+                        int dia = Integer.parseInt(input.readLine());
 
                         LocalDate fechaCompra =
                                 LocalDate.of(year, mes, dia);
