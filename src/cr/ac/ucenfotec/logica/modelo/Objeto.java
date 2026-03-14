@@ -59,6 +59,7 @@ public class Objeto {
         return Period.between(fechaCompra, LocalDate.now());
     }
 
+
     @Override
     public String toString() {
 
