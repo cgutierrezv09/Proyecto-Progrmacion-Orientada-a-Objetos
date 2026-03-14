@@ -1,3 +1,5 @@
+package cr.ac.ucenfotec.tipoUsuario;
+
 import java.time.LocalDate;
 
 public class Moderador extends Usuario {

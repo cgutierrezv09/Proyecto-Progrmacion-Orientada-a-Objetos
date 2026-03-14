@@ -1,3 +1,5 @@
+package cr.ac.ucenfotec.tipoUsuario;
+
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -71,5 +73,14 @@ public class Usuario {
     //metodo para calcular la edad
     public int calcularEdad(){
         return Period.between(fechaNacimiento,LocalDate.now()).getYears();
+    }
+
+    //toString
+
+
+    @Override
+    public String toString() {
+        return
+                "nombre= " + nombre  + "\n apellido= " + apellido + "\n fechaNacimiento=" + fechaNacimiento;
     }
 }

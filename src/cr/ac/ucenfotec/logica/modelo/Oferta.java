@@ -1,11 +1,13 @@
+package cr.ac.ucenfotec.logica.modelo;
+
 public class Oferta {
 
     private String nombreOferente;
-    private String puntuacionOferente;
+    private int puntuacionOferente;
     private double precioOferta;
 
     //Constructor
-    public Oferta(String nombreOferente, String puntuacionOferente, double precioOferta) {
+    public Oferta(String nombreOferente, int puntuacionOferente, double precioOferta) {
         this.nombreOferente = nombreOferente;
         this.puntuacionOferente = puntuacionOferente;
         this.precioOferta = precioOferta;
@@ -17,7 +19,7 @@ public class Oferta {
         return nombreOferente;
     }
 
-    public String getPuntuacionOferente() {
+    public int getPuntuacionOferente() {
         return puntuacionOferente;
     }
 
@@ -31,7 +33,7 @@ public class Oferta {
         this.nombreOferente = nombreOferente;
     }
 
-    public void setPuntuacionOferente(String puntuacionOferente) {
+    public void setPuntuacionOferente(int puntuacionOferente) {
         this.puntuacionOferente = puntuacionOferente;
     }
 

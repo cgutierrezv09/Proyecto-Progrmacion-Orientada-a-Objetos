@@ -11,6 +11,7 @@ public class Subasta {
     private double precioMinimo;
     private ArrayList<Objeto> objetos;
     private String estado;
+    ArrayList<Oferta> ofertas = new ArrayList<>();  // aca se ingresan las ofertas de las subastas
 
     // Constructor por Defecto
     public Subasta() {
@@ -50,6 +51,11 @@ public class Subasta {
 
     public Usuario getCreador() {
         return creador;
+    }
+
+    //getter para la oferta
+    public ArrayList<Oferta> getOfertas(){
+        return ofertas;
     }
 
     @Override

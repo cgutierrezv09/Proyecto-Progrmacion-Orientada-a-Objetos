@@ -1,7 +1,10 @@
+package cr.ac.ucenfotec.tipoUsuario;
+
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Coleccionista extends Usuario{
+public class Coleccionista extends Usuario {
 
     //Atributos
     private int puntuacion;
@@ -55,4 +58,7 @@ public class Coleccionista extends Usuario{
     public void setObjPropiedad(ArrayList<String> objPropiedad) {
         this.objPropiedad = objPropiedad;
     }
+
+    //toString
+
 }

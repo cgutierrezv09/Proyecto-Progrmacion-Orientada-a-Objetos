@@ -1,6 +1,8 @@
+package cr.ac.ucenfotec.tipoUsuario;
+
 import java.time.LocalDate;
 
-public class Vendedor extends Usuario{
+public class Vendedor extends Usuario {
 
     //Atributos
     private int puntuacion;

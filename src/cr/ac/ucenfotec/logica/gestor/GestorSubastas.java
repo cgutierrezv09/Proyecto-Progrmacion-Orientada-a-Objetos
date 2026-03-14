@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.logica.gestor;
 
+import cr.ac.ucenfotec.logica.modelo.Oferta;
 import cr.ac.ucenfotec.logica.modelo.Subasta;
 import cr.ac.ucenfotec.logica.modelo.Objeto;
 import cr.ac.ucenfotec.logica.modelo.Usuario;
+import cr.ac.ucenfotec.tipoUsuario.Coleccionista;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,6 +52,27 @@ public class GestorSubastas {
             System.out.println(s);
         }
 
+    }
+
+    // se crea la oferta desde aca
+    public void crearOferta(Coleccionista coleccionista, int indiceSubasta, double precio){
+
+        if(subastas.isEmpty()){
+            System.out.println("No hay subastas disponibles.");
+            return;
+        }
+
+        Subasta subasta = subastas.get(indiceSubasta);
+
+        Oferta oferta = new Oferta(
+                coleccionista.getNombre(),
+                coleccionista.getPuntuacion(),
+                precio
+        );
+
+        subasta.getOfertas().add(oferta);
+
+        System.out.println("Oferta registrada correctamente.");
     }
 
     public ArrayList<Subasta> getSubastas() {
