@@ -253,15 +253,25 @@ public class main {
 
 
                         // Crea una subasta reciclando datos previamente proporcionados y el nuevo objeto
-                        // gestorSubastas.crearSubasta(
-                        //fechaVencimiento,
-                        //Hacer logica del usuario que crea la subasta
-                        // new Usuario(),
-                        // precioMinimo,
-                        // objetos
-                        // );
+                        System.out.println("Seleccione el Usuario que Creará la Subasta");
 
-                        System.out.println("Subasta Creada Correctamente");
+                        for(int i = 0; i < usuarios.size(); i++) {
+                            Usuario u = usuarios.get(i);
+                            System.out.println(i + ". " + u.getNombre() + " " + u.getApellido());
+                        }
+
+                        int indiceUsuario = Integer.parseInt(input.readLine());
+
+                        Usuario creador = usuarios.get(indiceUsuario);
+
+                        gestorSubastas.crearSubasta(
+                                fechaVencimiento,
+                                creador,
+                                precioMinimo,
+                                objetos
+                        );
+
+                        System.out.println("Subasta Creada Correctamente por " + creador.getNombre());
 
                         break;
 

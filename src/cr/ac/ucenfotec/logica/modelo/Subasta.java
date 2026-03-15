@@ -3,6 +3,7 @@ package cr.ac.ucenfotec.logica.modelo;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import cr.ac.ucenfotec.tipoUsuario.*;
 
 public class Subasta {
 
@@ -63,7 +64,7 @@ public class Subasta {
 
         Duration restante = calcularTiempoRestante();
 
-        return "Subasta creada por: " + creador.getNombreCompleto() +
+        return "Subasta creada por: " + creador.getNombre() +
                 "\nPrecio minimo: " + precioMinimo +
                 "\nEstado: " + estado +
                 "\nTiempo restante: " + restante.toHours() + " horas" +

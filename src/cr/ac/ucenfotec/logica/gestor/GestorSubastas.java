@@ -3,8 +3,8 @@ package cr.ac.ucenfotec.logica.gestor;
 import cr.ac.ucenfotec.logica.modelo.Oferta;
 import cr.ac.ucenfotec.logica.modelo.Subasta;
 import cr.ac.ucenfotec.logica.modelo.Objeto;
-import cr.ac.ucenfotec.logica.modelo.Usuario;
 import cr.ac.ucenfotec.tipoUsuario.Coleccionista;
+import cr.ac.ucenfotec.tipoUsuario.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
