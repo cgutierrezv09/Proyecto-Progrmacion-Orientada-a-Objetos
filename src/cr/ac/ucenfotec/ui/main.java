@@ -173,10 +173,10 @@ public class main {
                                         , contraseñaColecionista, puntuacionColecionista, direccionColecionista, null, null);
 
                                 if (coleccionista.calcularEdad() < 18) {
-                                    System.out.println("El Vendedor debe de ser mayor de edad ");
+                                    System.out.println("El Coleccionista debe de ser mayor de edad ");
                                 } else {
                                     usuarios.add(coleccionista);
-                                    System.out.println("Vendedor registrado correctamente");
+                                    System.out.println("Coleccionista registrado correctamente");
                                 }
 
                                 break;
@@ -287,39 +287,37 @@ public class main {
 
 
                     case 5:
-
                         System.out.println("\n--- CREAR OFERTA ---");
-
                         System.out.println("Seleccione el coleccionista:");
 
-                        boolean hayColeccionista = false;
-                        int index = 0;
+                        // Lista separada solo con coleccionistas
+                        ArrayList<Coleccionista> coleccionistas = new ArrayList<>();
 
                         for (Usuario u : usuarios) {
-
                             if (u instanceof Coleccionista) {
-                                System.out.println(index + ". " + u.getNombre());
-                                hayColeccionista = true;
+                                coleccionistas.add((Coleccionista) u);
                             }
-
-                            index++;
                         }
 
-                        if (!hayColeccionista) {
+                        if (coleccionistas.isEmpty()) {
                             System.out.println("No hay coleccionistas registrados.");
                             break;
                         }
 
-                        int opcColeccionista = Integer.parseInt(input.readLine());
-                        Usuario usuarioSeleccion = usuarios.get(opcColeccionista);
+                        // Mostrar solo coleccionistas con índices propios
+                        for (int i = 0; i < coleccionistas.size(); i++) {
+                            System.out.println(i + ". " + coleccionistas.get(i).getNombre());
+                        }
 
-                        // Validar que sea coleccionista
-                        if (!(usuarioSeleccion instanceof Coleccionista)) {
-                            System.out.println("Solo los coleccionistas pueden hacer ofertas");
+                        int opcColeccionista = Integer.parseInt(input.readLine());
+
+                        // Validar que el índice esté dentro del rango
+                        if (opcColeccionista < 0 || opcColeccionista >= coleccionistas.size()) {
+                            System.out.println("Opción inválida. Solo los coleccionistas pueden hacer ofertas.");
                             break;
                         }
 
-                        Coleccionista coleccionista = (Coleccionista) usuarioSeleccion;
+                        Coleccionista coleccionista = coleccionistas.get(opcColeccionista);
 
                         // Verificar que existan subastas
                         if (gestorSubastas.getSubastas().isEmpty()) {
@@ -340,9 +338,7 @@ public class main {
                         System.out.println("Ingrese el precio ofertado:");
                         double precio = Double.parseDouble(input.readLine());
 
-                        // Crear oferta usando el gestor
                         gestorSubastas.crearOferta(coleccionista, indice, precio);
-
                         System.out.println("Oferta creada correctamente.");
 
                         break;
