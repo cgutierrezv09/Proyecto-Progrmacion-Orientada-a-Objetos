@@ -1,4 +1,5 @@
 package cr.ac.ucenfotec.tipoUsuario;
+import cr.ac.ucenfotec.logica.modelo.Objeto;
 
 
 import java.time.LocalDate;
@@ -10,13 +11,13 @@ public class Coleccionista extends Usuario {
     private int puntuacion;
     private String direccion;
     private ArrayList<String> listInteres;
-    private ArrayList<String> objPropiedad;
+    private ArrayList<Objeto> objPropiedad;
 
 
     //Super constructor con los atributos agregados
     public Coleccionista(String nombre, String apellido, LocalDate fechaNacimiento,
                          String contraseña, String correo, int puntuacion, String direccion,
-                         ArrayList<String> listInteres, ArrayList<String> objPropiedad) {
+                         ArrayList<String> listInteres, ArrayList<Objeto> objPropiedad) {
         super(nombre, apellido, fechaNacimiento, contraseña, correo);
         this.puntuacion = puntuacion;
         this.direccion = direccion;
@@ -51,11 +52,11 @@ public class Coleccionista extends Usuario {
         this.listInteres = listInteres;
     }
 
-    public ArrayList<String> getObjPropiedad() {
+    public ArrayList<Objeto> getObjPropiedad() {
         return objPropiedad;
     }
 
-    public void setObjPropiedad(ArrayList<String> objPropiedad) {
+    public void setObjPropiedad(ArrayList<Objeto> objPropiedad) {
         this.objPropiedad = objPropiedad;
     }
 
