@@ -169,14 +169,94 @@ public class main {
                                 String direccionColecionista = input.readLine();
 
 
-                                Coleccionista coleccionista = new Coleccionista(nombreColeccionista, apellidoColecionista, fechaColecionista, correoColecionista
-                                        , contraseñaColecionista, puntuacionColecionista, direccionColecionista, null, null);
+                                // --- OBJETOS DE PROPIEDAD ---
+                                ArrayList<Objeto> objColeccionista = new ArrayList<>();
+
+                                System.out.print("¿Cuántos objetos desea agregar a su colección? ");
+                                int cantObjetos = Integer.parseInt(input.readLine());
+
+                                for (int i = 0; i < cantObjetos; i++) {
+                                    System.out.println("\nObjeto " + (i + 1));
+
+                                    System.out.print("Nombre: ");
+                                    String nombreObj = input.readLine();
+
+                                    System.out.print("Descripción: ");
+                                    String descObj = input.readLine();
+
+                                    System.out.print("Estado: ");
+                                    String estadoObj = input.readLine();
+
+                                    System.out.print("Año de Compra: ");
+                                    int yearObj = Integer.parseInt(input.readLine());
+
+                                    System.out.print("Mes de Compra: ");
+                                    int mesObj = Integer.parseInt(input.readLine());
+
+                                    System.out.print("Día de Compra: ");
+                                    int diaObj = Integer.parseInt(input.readLine());
+
+                                    LocalDate fechaCompraObj = LocalDate.of(yearObj, mesObj, diaObj);
+                                    objColeccionista.add(new Objeto(nombreObj, descObj, estadoObj, fechaCompraObj));
+                                }
+
+                                // --- LISTA DE INTERESES ---
+                                ArrayList<Objeto> intereses = new ArrayList<>();
+
+                                // Recolectar objetos disponibles de otros coleccionistas ya registrados
+                                ArrayList<Objeto> objetosDisponibles = new ArrayList<>();
+                                for (Usuario u : usuarios) {
+                                    if (u instanceof Coleccionista) {
+                                        Coleccionista otroCol = (Coleccionista) u;
+                                        if (otroCol.getObjPropiedad() != null && !otroCol.getObjPropiedad().isEmpty()) {
+                                            objetosDisponibles.addAll(otroCol.getObjPropiedad());
+                                        }
+                                    }
+                                }
+
+                                if (objetosDisponibles.isEmpty()) {
+                                    System.out.println("No hay objetos de otros coleccionistas disponibles para agregar como interés.");
+                                } else {
+                                    System.out.println("\nObjetos disponibles para agregar como interés:");
+                                    for (int i = 0; i < objetosDisponibles.size(); i++) {
+                                        System.out.println(i + ". " + objetosDisponibles.get(i).getNombre()
+                                                + " - " + objetosDisponibles.get(i).getDescripcion());
+                                    }
+
+                                    System.out.print("¿Cuántos intereses desea agregar? ");
+                                    int cantIntereses = Integer.parseInt(input.readLine());
+
+                                    for (int i = 0; i < cantIntereses; i++) {
+                                        System.out.print("Seleccione el índice del objeto de interés: ");
+                                        int indiceInteres = Integer.parseInt(input.readLine());
+
+                                        if (indiceInteres < 0 || indiceInteres >= objetosDisponibles.size()) {
+                                            System.out.println("Índice inválido, se omite.");
+                                            continue;
+                                        }
+
+                                        Objeto objetoInteres = objetosDisponibles.get(indiceInteres);
+
+                                        if (intereses.contains(objetoInteres)) {
+                                            System.out.println("Ese objeto ya está en su lista de intereses.");
+                                        } else {
+                                            intereses.add(objetoInteres);
+                                            System.out.println("Interés agregado: " + objetoInteres.getNombre());
+                                        }
+                                    }
+                                }
+
+                                Coleccionista coleccionista = new Coleccionista(
+                                        nombreColeccionista, apellidoColecionista, fechaColecionista,
+                                        correoColecionista, contraseñaColecionista, puntuacionColecionista,
+                                        direccionColecionista, intereses, objColeccionista
+                                );
 
                                 if (coleccionista.calcularEdad() < 18) {
-                                    System.out.println("El Coleccionista debe de ser mayor de edad ");
+                                    System.out.println("El Coleccionista debe ser mayor de edad.");
                                 } else {
                                     usuarios.add(coleccionista);
-                                    System.out.println("Coleccionista registrado correctamente");
+                                    System.out.println("Coleccionista registrado correctamente.");
                                 }
 
                                 break;
@@ -210,9 +290,14 @@ public class main {
                         System.out.print("¿Cuántos Objetos Desea Agregar? ");
                         int cantidadObjetos = Integer.parseInt(input.readLine());
 
+                        // Regla 6: No se puede crear subasta sin objetos
+                        if (cantidadObjetos <= 0) {
+                            System.out.println("Debe agregar al menos un objeto a la subasta.");
+                            break;
+                        }
+
                         ArrayList<Objeto> objetos = new ArrayList<>();
 
-                        // Aqui empieza a construir la cantidad de objetos que el usuario haya pedido
                         for (int i = 0; i < cantidadObjetos; i++) {
 
                             System.out.println("\nObjeto Número " + (i + 1));
@@ -235,40 +320,35 @@ public class main {
                             System.out.print("Día de Compra: ");
                             int dia = Integer.parseInt(input.readLine());
 
-                            LocalDate fechaCompra =
-                                    LocalDate.of(year, mes, dia);
+                            LocalDate fechaCompra = LocalDate.of(year, mes, dia);
 
-                            // Al tener todos los datos, crea al objeto
-                            Objeto objeto = new Objeto(
-                                    nombre,
-                                    descripcion,
-                                    estado,
-                                    fechaCompra
-                            );
-
-                            // Agrega al objeto, para despues repetir el proceso si es necesario
-                            objetos.add(objeto);
-
+                            objetos.add(new Objeto(nombre, descripcion, estado, fechaCompra));
                         }
 
-
-                        // Crea una subasta reciclando datos previamente proporcionados y el nuevo objeto
+                        // Seleccionar creador
                         System.out.println("Seleccione el Usuario que Creará la Subasta");
 
-                        for(int i = 0; i < usuarios.size(); i++) {
+                        for (int i = 0; i < usuarios.size(); i++) {
                             Usuario u = usuarios.get(i);
                             System.out.println(i + ". " + u.getNombre() + " " + u.getApellido());
                         }
 
                         int indiceUsuario = Integer.parseInt(input.readLine());
 
+                        if (indiceUsuario < 0 || indiceUsuario >= usuarios.size()) {
+                            System.out.println("Índice inválido.");
+                            break;
+                        }
+
                         Usuario creador = usuarios.get(indiceUsuario);
 
+                        // Regla 3: El moderador no puede crear subastas
                         if (creador instanceof Moderador) {
                             System.out.println("El moderador no puede crear ni participar en subastas.");
                             break;
                         }
 
+                        // Regla 9: Si es coleccionista, los objetos deben pertenecer a su colección
                         if (creador instanceof Coleccionista) {
 
                             Coleccionista c = (Coleccionista) creador;
@@ -278,12 +358,27 @@ public class main {
                                 break;
                             }
 
+                            boolean objetosValidos = true;
+
                             for (Objeto o : objetos) {
-                                if (!c.getObjPropiedad().contains(o.getNombre())) {
+
+                                boolean encontrado = false;
+
+                                for (Objeto objPropio : c.getObjPropiedad()) {
+                                    if (objPropio.getNombre().equals(o.getNombre())) {
+                                        encontrado = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!encontrado) {
                                     System.out.println("El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
+                                    objetosValidos = false;
                                     break;
                                 }
                             }
+
+                            if (!objetosValidos) break;
                         }
 
                         gestorSubastas.crearSubasta(
@@ -293,7 +388,7 @@ public class main {
                                 objetos
                         );
 
-                        System.out.println("Subasta Creada Correctamente por " + creador.getNombre());
+                        System.out.println("Subasta creada correctamente por " + creador.getNombre());
 
                         break;
 

@@ -40,4 +40,11 @@ public class Oferta {
     public void setPrecioOferta(double precioOferta) {
         this.precioOferta = precioOferta;
     }
+
+
+    @Override
+    public String toString() {
+        return "Oferta{" +
+                "nombreOferente=" + nombreOferente + "\n puntuacionOferente=" + puntuacionOferente + " \n precioOferta=" + precioOferta ;
+    }
 }

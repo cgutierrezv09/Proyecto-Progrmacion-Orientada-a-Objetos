@@ -10,14 +10,14 @@ public class Coleccionista extends Usuario {
     //Atributos
     private int puntuacion;
     private String direccion;
-    private ArrayList<String> listInteres;
+    private ArrayList<Objeto> listInteres;
     private ArrayList<Objeto> objPropiedad;
 
 
     //Super constructor con los atributos agregados
     public Coleccionista(String nombre, String apellido, LocalDate fechaNacimiento,
                          String contraseña, String correo, int puntuacion, String direccion,
-                         ArrayList<String> listInteres, ArrayList<Objeto> objPropiedad) {
+                         ArrayList<Objeto> listInteres, ArrayList<Objeto> objPropiedad) {
         super(nombre, apellido, fechaNacimiento, contraseña, correo);
         this.puntuacion = puntuacion;
         this.direccion = direccion;
@@ -43,12 +43,12 @@ public class Coleccionista extends Usuario {
         this.direccion = direccion;
     }
 
-    public ArrayList<String> getListInteres() {
+    public ArrayList<Objeto> getListInteres() {
         return listInteres;
     }
     //Setters
 
-    public void setListInteres(ArrayList<String> listInteres) {
+    public void setListInteres(ArrayList<Objeto> listInteres) {
         this.listInteres = listInteres;
     }
 
@@ -62,4 +62,9 @@ public class Coleccionista extends Usuario {
 
     //toString
 
+
+    @Override
+    public String toString() {
+        return "puntuacion=" + puntuacion + "\n Direccion='" + direccion  + "\n lista de Interes=" + listInteres + "\n Objetos de la prpiedad =" + objPropiedad;
+    }
 }
