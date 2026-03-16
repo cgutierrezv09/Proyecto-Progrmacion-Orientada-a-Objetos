@@ -264,6 +264,28 @@ public class main {
 
                         Usuario creador = usuarios.get(indiceUsuario);
 
+                        if (creador instanceof Moderador) {
+                            System.out.println("El moderador no puede crear ni participar en subastas.");
+                            break;
+                        }
+
+                        if (creador instanceof Coleccionista) {
+
+                            Coleccionista c = (Coleccionista) creador;
+
+                            if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()) {
+                                System.out.println("El coleccionista no tiene objetos registrados en su colección.");
+                                break;
+                            }
+
+                            for (Objeto o : objetos) {
+                                if (!c.getObjPropiedad().contains(o.getNombre())) {
+                                    System.out.println("El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
+                                    break;
+                                }
+                            }
+                        }
+
                         gestorSubastas.crearSubasta(
                                 fechaVencimiento,
                                 creador,
@@ -334,7 +356,18 @@ public class main {
 
                         int indice = Integer.parseInt(input.readLine());
 
-                        // Pedir precio
+                        Subasta subastaSeleccionadaOferta = gestorSubastas.getSubastas().get(indice);
+
+                        if (subastaSeleccionadaOferta.getCreador() instanceof Coleccionista) {
+
+                            Coleccionista creadorSubasta = (Coleccionista) subastaSeleccionadaOferta.getCreador();
+
+                            if (creadorSubasta.getNombre().equals(coleccionista.getNombre())) {
+                                System.out.println("El creador de la subasta no puede ofertar en su propia subasta.");
+                                break;
+                            }
+                        }
+
                         System.out.println("Ingrese el precio ofertado:");
                         double precio = Double.parseDouble(input.readLine());
 
