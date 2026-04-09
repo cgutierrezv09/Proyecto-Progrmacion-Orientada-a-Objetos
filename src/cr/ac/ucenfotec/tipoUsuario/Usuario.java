@@ -7,11 +7,11 @@ import java.time.Period;
 public class Usuario {
 
     //Atributos
-    private String nombre;
-    private String apellido;
-    private LocalDate fechaNacimiento; //variable para que el usuario ingrese la fecha de nacimiento
-    private  String contraseña;
-    private String correo;
+    protected String nombre;
+    protected String apellido;
+    protected LocalDate fechaNacimiento; //variable para que el usuario ingrese la fecha de nacimiento
+    protected   String contraseña;
+    protected String correo;
 
     //constructor
     public Usuario(String nombre, String apellido, LocalDate fechaNacimiento, String contraseña, String correo) {
