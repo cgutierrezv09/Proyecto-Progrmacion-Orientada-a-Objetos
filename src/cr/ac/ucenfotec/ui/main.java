@@ -1,5 +1,8 @@
 package cr.ac.ucenfotec.ui;
 
+import cr.ac.ucenfotec.logica.excepciones.EdadInsuficienteException;
+import cr.ac.ucenfotec.logica.excepciones.OfertaInvalidaException;
+import cr.ac.ucenfotec.logica.excepciones.UsuarioNoAutorizadoException;
 import cr.ac.ucenfotec.tipoUsuario.*;
 import cr.ac.ucenfotec.logica.gestor.GestorSubastas;
 import cr.ac.ucenfotec.logica.modelo.Objeto;
@@ -37,13 +40,7 @@ public class main {
             return;
         }else
             for (Usuario u: usuarios){
-                if (u instanceof Moderador){
-                    System.out.println("Tipo de usuario: Moderador");
-                }else if(u instanceof Vendedor){
-                    System.out.println("Tipo de usuario: Vendedor");
-                }else if(u instanceof Coleccionista){
-                    System.out.println("Tipo de usuario: Coleccionista");
-                }
+                System.out.println(u.mostrarRol());
                 System.out.println(u);
                 System.out.println("--------------------");
             }
@@ -81,13 +78,15 @@ public class main {
 
             Moderador moderador = new Moderador(nombreMod, apellido, fecha, contraseña, correo);
 
-            if (moderador.calcularEdad() < 18) {
-                System.out.println("El moderador debe de ser mayor de edad ");
-            } else {
-                usuarios.add(moderador);
-                System.out.println("Moderador registrado correctamente");
+            try {
+                moderador.validarEdad();
+            } catch (EdadInsuficienteException e) {
+                System.out.println(e.getMessage());
+                return;
             }
+            usuarios.add(moderador);
 
+        }
             //Menu de Opciones
             do {
 
@@ -135,12 +134,13 @@ public class main {
 
                                 Vendedor vendedor = new Vendedor(nombreVendedor, apellidoVendedor, fechaVendedor, correoVendedor
                                         , contraseñaVendedor, puntuacionVendedor, direccionVendedor);
-                                if (vendedor.calcularEdad() < 18) {
-                                    System.out.println("El Vendedor debe de ser mayor de edad ");
-                                } else {
-                                    usuarios.add(vendedor);
-                                    System.out.println("Vendedor registrado correctamente");
+                                try {
+                                    vendedor.validarEdad();
+                                }catch (EdadInsuficienteException e){
+                                    System.out.println(e.getMessage());
+                                    return ;
                                 }
+                                usuarios.add(vendedor);
 
                                 break;
 
@@ -167,6 +167,8 @@ public class main {
 
                                 System.out.println("Ingrese su direccion");
                                 String direccionColecionista = input.readLine();
+
+
 
 
                                 // --- OBJETOS DE PROPIEDAD ---
@@ -252,12 +254,14 @@ public class main {
                                         direccionColecionista, intereses, objColeccionista
                                 );
 
-                                if (coleccionista.calcularEdad() < 18) {
-                                    System.out.println("El Coleccionista debe ser mayor de edad.");
-                                } else {
-                                    usuarios.add(coleccionista);
-                                    System.out.println("Coleccionista registrado correctamente.");
+                                try {
+                                    coleccionista.validarEdad();
+                                }catch (EdadInsuficienteException e){
+                                    System.out.println(e.getMessage());
+                                    return ;
                                 }
+                                usuarios.add(coleccionista);
+
 
                                 break;
 
@@ -343,52 +347,55 @@ public class main {
                         Usuario creador = usuarios.get(indiceUsuario);
 
                         // Regla 3: El moderador no puede crear subastas
-                        if (creador instanceof Moderador) {
-                            System.out.println("El moderador no puede crear ni participar en subastas.");
-                            break;
-                        }
 
-                        // Regla 9: Si es coleccionista, los objetos deben pertenecer a su colección
-                        if (creador instanceof Coleccionista) {
-
-                            Coleccionista c = (Coleccionista) creador;
-
-                            if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()) {
-                                System.out.println("El coleccionista no tiene objetos registrados en su colección.");
-                                break;
+                        try {
+                            if (creador instanceof  Moderador){
+                                throw new UsuarioNoAutorizadoException("El moderador no puede crear ni participar en subastas");
                             }
+                            // Regla 9: Si es coleccionista, los objetos deben pertenecer a su colección
+                            if (creador instanceof Coleccionista) {
 
-                            boolean objetosValidos = true;
+                                Coleccionista c = (Coleccionista) creador;
 
-                            for (Objeto o : objetos) {
+                                if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()) {
+                                    System.out.println("El coleccionista no tiene objetos registrados en su colección.");
+                                    break;
+                                }
 
-                                boolean encontrado = false;
+                                boolean objetosValidos = true;
 
-                                for (Objeto objPropio : c.getObjPropiedad()) {
-                                    if (objPropio.getNombre().equals(o.getNombre())) {
-                                        encontrado = true;
+                                for (Objeto o : objetos) {
+
+                                    boolean encontrado = false;
+
+                                    for (Objeto objPropio : c.getObjPropiedad()) {
+                                        if (objPropio.getNombre().equals(o.getNombre())) {
+                                            encontrado = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!encontrado) {
+                                        System.out.println("El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
+                                        objetosValidos = false;
                                         break;
                                     }
                                 }
 
-                                if (!encontrado) {
-                                    System.out.println("El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
-                                    objetosValidos = false;
-                                    break;
-                                }
+                                if (!objetosValidos) break;
                             }
 
-                            if (!objetosValidos) break;
+                            gestorSubastas.crearSubasta(
+                                    fechaVencimiento,
+                                    creador,
+                                    precioMinimo,
+                                    objetos
+                            );
+
+                            System.out.println("Subasta creada correctamente por " + creador.getNombre());
+                        }catch (UsuarioNoAutorizadoException e){
+                            System.out.println(e.getMessage());
                         }
-
-                        gestorSubastas.crearSubasta(
-                                fechaVencimiento,
-                                creador,
-                                precioMinimo,
-                                objetos
-                        );
-
-                        System.out.println("Subasta creada correctamente por " + creador.getNombre());
 
                         break;
 
@@ -465,9 +472,17 @@ public class main {
 
                         System.out.println("Ingrese el precio ofertado:");
                         double precio = Double.parseDouble(input.readLine());
+                        try {
+                            if (subastaSeleccionadaOferta.getPrecioMinimo() > precio){
+                                throw new OfertaInvalidaException("No se puede ofertar menos que el precio minimo");
+                            }
+                            gestorSubastas.crearOferta(coleccionista, indice, precio);
+                            System.out.println("Oferta creada correctamente.");
+                        }catch (OfertaInvalidaException e){
+                            System.out.println(e.getMessage());
+                        }
 
-                        gestorSubastas.crearOferta(coleccionista, indice, precio);
-                        System.out.println("Oferta creada correctamente.");
+
 
                         break;
 
@@ -515,4 +530,3 @@ public class main {
 
         }
     }
-}

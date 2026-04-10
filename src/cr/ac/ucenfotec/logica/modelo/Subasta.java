@@ -54,6 +54,10 @@ public class Subasta {
         return creador;
     }
 
+    public double getPrecioMinimo() {
+        return precioMinimo;
+    }
+
     //getter para la oferta
     public ArrayList<Oferta> getOfertas(){
         return ofertas;

@@ -36,4 +36,16 @@ public class Vendedor extends Usuario {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+
+    @Override
+    public String toString() {
+        return "Vendedor: \n" + super.toString()+
+                "\n puntuacion=" + puntuacion +
+                "\n direccion=" + direccion ;
+    }
+
+    @Override
+    public String mostrarRol() {
+        return "Vendedor";
+    }
 }

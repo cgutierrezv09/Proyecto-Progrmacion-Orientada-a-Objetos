@@ -1,10 +1,12 @@
 package cr.ac.ucenfotec.tipoUsuario;
 
+import cr.ac.ucenfotec.logica.excepciones.EdadInsuficienteException;
+
 import java.time.LocalDate;
 import java.time.Period;
 
 
-public class Usuario {
+public abstract class Usuario {
 
     //Atributos
     protected String nombre;
@@ -75,6 +77,14 @@ public class Usuario {
         return Period.between(fechaNacimiento,LocalDate.now()).getYears();
     }
 
+    //metodo para validar la edad
+    public  void validarEdad(){
+
+       if (calcularEdad()<18){
+           throw new EdadInsuficienteException("El usuario no puede ser menor de 18 años");
+       }
+    }
+
     //toString
 
 
@@ -83,4 +93,7 @@ public class Usuario {
         return
                 "nombre= " + nombre  + "\n apellido= " + apellido + "\n fechaNacimiento=" + fechaNacimiento;
     }
+
+    // Metodo abstracto
+     public abstract String mostrarRol();
 }
