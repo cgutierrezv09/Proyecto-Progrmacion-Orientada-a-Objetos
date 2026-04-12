@@ -1,5 +1,9 @@
 package cr.ac.ucenfotec.ui;
 
+import cr.ac.ucenfotec.logica.excepciones.EdadInsuficienteException;
+import cr.ac.ucenfotec.logica.excepciones.OfertaInvalidaException;
+import cr.ac.ucenfotec.logica.excepciones.SubastaInvalidaException;
+import cr.ac.ucenfotec.logica.excepciones.UsuarioNoAutorizadoException;
 import cr.ac.ucenfotec.tipoUsuario.*;
 import cr.ac.ucenfotec.logica.gestor.GestorSubastas;
 import cr.ac.ucenfotec.logica.modelo.Objeto;
@@ -18,6 +22,47 @@ import java.util.ArrayList;
 public class main {
 
 
+    //verifiacion de los datos
+    public static int leerEntero(BufferedReader input) {
+        do {
+            try {
+                return Integer.parseInt(input.readLine());
+            } catch (Exception e) {
+                System.out.println("Ingrese un número entero válido");
+            }
+        } while (true);
+    }
+
+    public static String leerString(BufferedReader input){
+        do {
+            try {
+                return input.readLine();
+            }catch (Exception e){
+                System.out.println("Ingrese carcteres valido");
+            }
+
+        }while (true);
+    }
+
+    public static double leerDouble(BufferedReader input){
+        do {
+            try {
+                return Double.parseDouble(input.readLine());
+            }catch (Exception e){
+                System.out.println("Ingrese el decimal de manera correcta");
+            }
+        }while (true);
+    }
+
+    public static LocalDate LeerFecha(BufferedReader input){
+        do {
+            try {
+                return LocalDate.parse(input.readLine());
+            }catch (Exception e){
+                System.out.println("Ingrese la fecha correctamente");
+            }
+        }while (true);
+    }
 
     //Verificacion si ya existe un moderador
     public static boolean existeMod(ArrayList<Usuario> usuarios) {
@@ -37,13 +82,7 @@ public class main {
             return;
         }else
             for (Usuario u: usuarios){
-                if (u instanceof Moderador){
-                    System.out.println("Tipo de usuario: Moderador");
-                }else if(u instanceof Vendedor){
-                    System.out.println("Tipo de usuario: Vendedor");
-                }else if(u instanceof Coleccionista){
-                    System.out.println("Tipo de usuario: Coleccionista");
-                }
+                System.out.println(u.mostrarRol());
                 System.out.println(u);
                 System.out.println("--------------------");
             }
@@ -65,29 +104,31 @@ public class main {
         } else {
             System.out.println("---REGISTRO MODERADOR---");
             System.out.println("Ingrese el nombre:");
-            String nombreMod = input.readLine();
+            String nombreMod = leerString(input);
 
             System.out.println("Ingrese su apellido");
-            String apellido = input.readLine();
+            String apellido = leerString(input);
 
             System.out.println("Ingrese su fecha de nacimiento con el siguiente fommato AAAA-MM-DD");
-            LocalDate fecha = LocalDate.parse(input.readLine());
+            LocalDate fecha = LeerFecha(input);
 
             System.out.println("Ingrese su correo");
-            String correo = input.readLine();
+            String correo = leerString(input);
 
             System.out.println("Ingrese su contraseña");
-            String contraseña = input.readLine();
+            String contraseña =leerString(input);
 
             Moderador moderador = new Moderador(nombreMod, apellido, fecha, contraseña, correo);
 
-            if (moderador.calcularEdad() < 18) {
-                System.out.println("El moderador debe de ser mayor de edad ");
-            } else {
-                usuarios.add(moderador);
-                System.out.println("Moderador registrado correctamente");
+            try {
+                moderador.validarEdad();
+            } catch (EdadInsuficienteException e) {
+                System.out.println(e.getMessage());
+                return;
             }
+            usuarios.add(moderador);
 
+        }
             //Menu de Opciones
             do {
 
@@ -98,49 +139,51 @@ public class main {
                 System.out.println("4. Listar Subastas");
                 System.out.println("5. Crear Oferta");
                 System.out.println("6. Listar Ofertas");
+                System.out.println("7. Cerrar Subasta");
                 System.out.println("0. Salir");
 
-                opcionElegida = Integer.parseInt(input.readLine());
+                opcionElegida = leerEntero(input);
 
                 switch (opcionElegida) {
                     case 1:
                         //caso del registro usuarios
                         System.out.println("--- REGISTRO DE USUARIOS ---");
                         System.out.println("Cual usuario deseas ser?  \n 1. Vendedor \n 2. Coleccionista");
-                        int opcUsuario = Integer.parseInt(input.readLine());
+                        int opcUsuario = leerEntero(input);
 
                         switch (opcUsuario) {
                             case 1:
 
                                 System.out.println("Ingrese el nombre:");
-                                String nombreVendedor = input.readLine();
+                                String nombreVendedor = leerString(input);
 
                                 System.out.println("Ingrese su apellido");
-                                String apellidoVendedor = input.readLine();
+                                String apellidoVendedor = leerString(input);
 
                                 System.out.println("Ingrese su fecha de nacimiento con el siguiente fommato AAAA-MM-DD");
-                                LocalDate fechaVendedor = LocalDate.parse(input.readLine());
+                                LocalDate fechaVendedor = LeerFecha(input);
 
                                 System.out.println("Ingrese su correo");
-                                String correoVendedor = input.readLine();
+                                String correoVendedor = leerString(input);
 
                                 System.out.println("Ingrese su contraseña");
-                                String contraseñaVendedor = input.readLine();
+                                String contraseñaVendedor = leerString(input);
 
                                 System.out.println("Ingrese su puntuacion del 1-10");
-                                int puntuacionVendedor = Integer.parseInt(input.readLine());
+                                int puntuacionVendedor = leerEntero(input);;
 
                                 System.out.println("Ingrese su direccion");
-                                String direccionVendedor = input.readLine();
+                                String direccionVendedor = leerString(input);
 
                                 Vendedor vendedor = new Vendedor(nombreVendedor, apellidoVendedor, fechaVendedor, correoVendedor
                                         , contraseñaVendedor, puntuacionVendedor, direccionVendedor);
-                                if (vendedor.calcularEdad() < 18) {
-                                    System.out.println("El Vendedor debe de ser mayor de edad ");
-                                } else {
-                                    usuarios.add(vendedor);
-                                    System.out.println("Vendedor registrado correctamente");
+                                try {
+                                    vendedor.validarEdad();
+                                }catch (EdadInsuficienteException e){
+                                    System.out.println(e.getMessage());
+                                    return ;
                                 }
+                                usuarios.add(vendedor);
 
                                 break;
 
@@ -148,53 +191,55 @@ public class main {
                             case 2:
 
                                 System.out.println("Ingrese el nombre:");
-                                String nombreColeccionista = input.readLine();
+                                String nombreColeccionista = leerString(input);
 
                                 System.out.println("Ingrese su apellido");
-                                String apellidoColecionista = input.readLine();
+                                String apellidoColecionista = leerString(input);
 
                                 System.out.println("Ingrese su fecha de nacimiento con el siguiente fommato AAAA-MM-DD");
-                                LocalDate fechaColecionista = LocalDate.parse(input.readLine());
+                                LocalDate fechaColecionista = LeerFecha(input);
 
                                 System.out.println("Ingrese su correo");
-                                String correoColecionista = input.readLine();
+                                String correoColecionista = leerString(input);
 
                                 System.out.println("Ingrese su contraseña");
-                                String contraseñaColecionista = input.readLine();
+                                String contraseñaColecionista = leerString(input);
 
                                 System.out.println("Ingrese su puntuacion del 1-10");
-                                int puntuacionColecionista = Integer.parseInt(input.readLine());
+                                int puntuacionColecionista = leerEntero(input);;
 
                                 System.out.println("Ingrese su direccion");
-                                String direccionColecionista = input.readLine();
+                                String direccionColecionista = leerString(input);
+
+
 
 
                                 // --- OBJETOS DE PROPIEDAD ---
                                 ArrayList<Objeto> objColeccionista = new ArrayList<>();
 
                                 System.out.print("¿Cuántos objetos desea agregar a su colección? ");
-                                int cantObjetos = Integer.parseInt(input.readLine());
+                                int cantObjetos = leerEntero(input);;
 
                                 for (int i = 0; i < cantObjetos; i++) {
                                     System.out.println("\nObjeto " + (i + 1));
 
                                     System.out.print("Nombre: ");
-                                    String nombreObj = input.readLine();
+                                    String nombreObj = leerString(input);
 
                                     System.out.print("Descripción: ");
-                                    String descObj = input.readLine();
+                                    String descObj = leerString(input);
 
                                     System.out.print("Estado: ");
-                                    String estadoObj = input.readLine();
+                                    String estadoObj = leerString(input);
 
                                     System.out.print("Año de Compra: ");
-                                    int yearObj = Integer.parseInt(input.readLine());
+                                    int yearObj = leerEntero(input);;
 
                                     System.out.print("Mes de Compra: ");
-                                    int mesObj = Integer.parseInt(input.readLine());
+                                    int mesObj = leerEntero(input);;
 
                                     System.out.print("Día de Compra: ");
-                                    int diaObj = Integer.parseInt(input.readLine());
+                                    int diaObj = leerEntero(input);;
 
                                     LocalDate fechaCompraObj = LocalDate.of(yearObj, mesObj, diaObj);
                                     objColeccionista.add(new Objeto(nombreObj, descObj, estadoObj, fechaCompraObj));
@@ -224,11 +269,11 @@ public class main {
                                     }
 
                                     System.out.print("¿Cuántos intereses desea agregar? ");
-                                    int cantIntereses = Integer.parseInt(input.readLine());
+                                    int cantIntereses = leerEntero(input);;
 
                                     for (int i = 0; i < cantIntereses; i++) {
                                         System.out.print("Seleccione el índice del objeto de interés: ");
-                                        int indiceInteres = Integer.parseInt(input.readLine());
+                                        int indiceInteres =leerEntero(input);;
 
                                         if (indiceInteres < 0 || indiceInteres >= objetosDisponibles.size()) {
                                             System.out.println("Índice inválido, se omite.");
@@ -252,12 +297,14 @@ public class main {
                                         direccionColecionista, intereses, objColeccionista
                                 );
 
-                                if (coleccionista.calcularEdad() < 18) {
-                                    System.out.println("El Coleccionista debe ser mayor de edad.");
-                                } else {
-                                    usuarios.add(coleccionista);
-                                    System.out.println("Coleccionista registrado correctamente.");
+                                try {
+                                    coleccionista.validarEdad();
+                                }catch (EdadInsuficienteException e){
+                                    System.out.println(e.getMessage());
+                                    return ;
                                 }
+                                usuarios.add(coleccionista);
+
 
                                 break;
 
@@ -280,15 +327,15 @@ public class main {
 
                         // Pide al usuario los datos por medio de consola
                         System.out.print("Precio Mínimo: ");
-                        double precioMinimo = Double.parseDouble(input.readLine());
+                        double precioMinimo = leerDouble(input);
 
                         System.out.print("Días Hasta que Cierre la Subasta: ");
-                        int dias = Integer.parseInt(input.readLine());
+                        int dias = leerEntero(input);;
 
                         LocalDateTime fechaVencimiento = LocalDateTime.now().plusDays(dias);
 
                         System.out.print("¿Cuántos Objetos Desea Agregar? ");
-                        int cantidadObjetos = Integer.parseInt(input.readLine());
+                        int cantidadObjetos = leerEntero(input);
 
                         // Regla 6: No se puede crear subasta sin objetos
                         if (cantidadObjetos <= 0) {
@@ -303,22 +350,22 @@ public class main {
                             System.out.println("\nObjeto Número " + (i + 1));
 
                             System.out.print("Nombre: ");
-                            String nombre = input.readLine();
+                            String nombre = leerString(input);
 
                             System.out.print("Descripción: ");
-                            String descripcion = input.readLine();
+                            String descripcion = leerString(input);
 
                             System.out.print("Estado: ");
-                            String estado = input.readLine();
+                            String estado = leerString(input);
 
                             System.out.print("Año de Compra: ");
-                            int year = Integer.parseInt(input.readLine());
+                            int year = leerEntero(input);
 
                             System.out.print("Mes de Compra: ");
-                            int mes = Integer.parseInt(input.readLine());
+                            int mes = leerEntero(input);;
 
                             System.out.print("Día de Compra: ");
-                            int dia = Integer.parseInt(input.readLine());
+                            int dia = leerEntero(input);;
 
                             LocalDate fechaCompra = LocalDate.of(year, mes, dia);
 
@@ -333,7 +380,7 @@ public class main {
                             System.out.println(i + ". " + u.getNombre() + " " + u.getApellido());
                         }
 
-                        int indiceUsuario = Integer.parseInt(input.readLine());
+                        int indiceUsuario = leerEntero(input);
 
                         if (indiceUsuario < 0 || indiceUsuario >= usuarios.size()) {
                             System.out.println("Índice inválido.");
@@ -343,52 +390,20 @@ public class main {
                         Usuario creador = usuarios.get(indiceUsuario);
 
                         // Regla 3: El moderador no puede crear subastas
-                        if (creador instanceof Moderador) {
-                            System.out.println("El moderador no puede crear ni participar en subastas.");
-                            break;
+
+                        try {
+                            gestorSubastas.crearSubasta(
+                                    fechaVencimiento,
+                                    creador,
+                                    precioMinimo,
+                                    objetos
+                            );
+
+                            System.out.println("Subasta creada correctamente por " + creador.getNombre());
+
+                        } catch (UsuarioNoAutorizadoException | SubastaInvalidaException e){
+                            System.out.println(e.getMessage());
                         }
-
-                        // Regla 9: Si es coleccionista, los objetos deben pertenecer a su colección
-                        if (creador instanceof Coleccionista) {
-
-                            Coleccionista c = (Coleccionista) creador;
-
-                            if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()) {
-                                System.out.println("El coleccionista no tiene objetos registrados en su colección.");
-                                break;
-                            }
-
-                            boolean objetosValidos = true;
-
-                            for (Objeto o : objetos) {
-
-                                boolean encontrado = false;
-
-                                for (Objeto objPropio : c.getObjPropiedad()) {
-                                    if (objPropio.getNombre().equals(o.getNombre())) {
-                                        encontrado = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!encontrado) {
-                                    System.out.println("El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
-                                    objetosValidos = false;
-                                    break;
-                                }
-                            }
-
-                            if (!objetosValidos) break;
-                        }
-
-                        gestorSubastas.crearSubasta(
-                                fechaVencimiento,
-                                creador,
-                                precioMinimo,
-                                objetos
-                        );
-
-                        System.out.println("Subasta creada correctamente por " + creador.getNombre());
 
                         break;
 
@@ -407,7 +422,6 @@ public class main {
                         System.out.println("\n--- CREAR OFERTA ---");
                         System.out.println("Seleccione el coleccionista:");
 
-                        // Lista separada solo con coleccionistas
                         ArrayList<Coleccionista> coleccionistas = new ArrayList<>();
 
                         for (Usuario u : usuarios) {
@@ -421,35 +435,31 @@ public class main {
                             break;
                         }
 
-                        // Mostrar solo coleccionistas con índices propios
                         for (int i = 0; i < coleccionistas.size(); i++) {
                             System.out.println(i + ". " + coleccionistas.get(i).getNombre());
                         }
 
-                        int opcColeccionista = Integer.parseInt(input.readLine());
+                        int opcColeccionista = leerEntero(input);
 
-                        // Validar que el índice esté dentro del rango
                         if (opcColeccionista < 0 || opcColeccionista >= coleccionistas.size()) {
-                            System.out.println("Opción inválida. Solo los coleccionistas pueden hacer ofertas.");
+                            System.out.println("Opción inválida.");
                             break;
                         }
 
                         Coleccionista coleccionista = coleccionistas.get(opcColeccionista);
 
-                        // Verificar que existan subastas
                         if (gestorSubastas.getSubastas().isEmpty()) {
                             System.out.println("No hay subastas disponibles.");
                             break;
                         }
 
-                        // Mostrar subastas
                         System.out.println("Seleccione la subasta:");
 
                         for (int i = 0; i < gestorSubastas.getSubastas().size(); i++) {
                             System.out.println(i + ". " + gestorSubastas.getSubastas().get(i));
                         }
 
-                        int indice = Integer.parseInt(input.readLine());
+                        int indice = leerEntero(input);
 
                         Subasta subastaSeleccionadaOferta = gestorSubastas.getSubastas().get(indice);
 
@@ -464,10 +474,14 @@ public class main {
                         }
 
                         System.out.println("Ingrese el precio ofertado:");
-                        double precio = Double.parseDouble(input.readLine());
+                        double precio = leerDouble(input);
 
-                        gestorSubastas.crearOferta(coleccionista, indice, precio);
-                        System.out.println("Oferta creada correctamente.");
+                        try {
+                            gestorSubastas.crearOferta(coleccionista, indice, precio);
+                            System.out.println("Oferta creada correctamente.");
+                        } catch (OfertaInvalidaException e){
+                            System.out.println(e.getMessage());
+                        }
 
                         break;
 
@@ -487,7 +501,7 @@ public class main {
                             System.out.println(i + ". " + gestorSubastas.getSubastas().get(i));
                         }
 
-                        int indiceSubasta = Integer.parseInt(input.readLine());
+                        int indiceSubasta = leerEntero(input);
 
                         Subasta subastaSeleccionada =
                                 gestorSubastas.getSubastas().get(indiceSubasta);
@@ -506,6 +520,29 @@ public class main {
                         }
 
                         break;
+                    case 7:
+                        System.out.println("\n--- CERRAR SUBASTA ---");
+
+                        if (gestorSubastas.getSubastas().isEmpty()) {
+                            System.out.println("No hay subastas disponibles.");
+                            break;
+                        }
+
+                        System.out.println("Seleccione la subasta a cerrar:");
+
+                        for (int i = 0; i < gestorSubastas.getSubastas().size(); i++) {
+                            System.out.println(i + ". " + gestorSubastas.getSubastas().get(i));
+                        }
+
+                        int indiceCerrar = leerEntero(input);
+
+                        try {
+                            gestorSubastas.cerrarSubasta(indiceCerrar);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        break;
 
                 }
 
@@ -515,4 +552,3 @@ public class main {
 
         }
     }
-}

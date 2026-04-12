@@ -65,6 +65,15 @@ public class Coleccionista extends Usuario {
 
     @Override
     public String toString() {
-        return "puntuacion=" + puntuacion + "\n Direccion='" + direccion  + "\n lista de Interes=" + listInteres + "\n Objetos de la prpiedad =" + objPropiedad;
+        return "Coleccionista: \n" + super.toString()+
+                "\n puntuacion=" + puntuacion +
+                "\n direccion=" + direccion +
+                "\n listInteres=" + listInteres +
+                "\n objPropiedad=" + objPropiedad;
+    }
+
+    @Override
+    public String mostrarRol() {
+        return "Coleccionista";
     }
 }
