@@ -1,5 +1,6 @@
 package cr.ac.ucenfotec.logica.gestor;
 
+import cr.ac.ucenfotec.logica.excepciones.SubastaInvalidaException;
 import cr.ac.ucenfotec.logica.modelo.Oferta;
 import cr.ac.ucenfotec.logica.modelo.Subasta;
 import cr.ac.ucenfotec.logica.modelo.Objeto;
@@ -25,11 +26,14 @@ public class GestorSubastas {
                              ArrayList<Objeto> objetos) {
 
         // Si no hay objetos para subastar, no hay subasta
-        if (objetos == null || objetos.isEmpty()) {
-            System.out.println("No se puede crear una subasta sin objetos");
+        try {
+            if (objetos==null || objetos.isEmpty()){
+                throw new SubastaInvalidaException("No puedes crear una subasta sin objetos");
+            }
+        } catch (SubastaInvalidaException e) {
+            System.out.println(e.getMessage());
             return;
         }
-
         Subasta nueva = new Subasta(fechaVencimiento, creador, precioMinimo);
 
         for (Objeto o : objetos) {
@@ -42,8 +46,12 @@ public class GestorSubastas {
     // Imprime todas las subastas registradas en el sistema
     public void listarSubastas() {
 
-        if (subastas.isEmpty()) {
-            System.out.println("No hay subastas registradas");
+        try {
+            if (subastas.isEmpty()){
+                throw new SubastaInvalidaException("No hay subastas registradas");
+            }
+        } catch (SubastaInvalidaException e) {
+            System.out.println(e.getMessage());
             return;
         }
 
@@ -57,10 +65,16 @@ public class GestorSubastas {
     // se crea la oferta desde aca
     public void crearOferta(Coleccionista coleccionista, int indiceSubasta, double precio){
 
-        if(subastas.isEmpty()){
-            System.out.println("No hay subastas disponibles.");
+        try {
+            if (subastas.isEmpty()){
+                throw new SubastaInvalidaException("No hay subastas disponibles");
+            }
+
+        }catch (SubastaInvalidaException e){
+            System.out.println(e.getMessage());
             return;
         }
+
 
         Subasta subasta = subastas.get(indiceSubasta);
 

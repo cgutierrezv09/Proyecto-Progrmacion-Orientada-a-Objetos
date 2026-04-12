@@ -21,6 +21,47 @@ import java.util.ArrayList;
 public class main {
 
 
+    //verifiacion de los datos
+    public static int leerEntero(BufferedReader input) {
+        do {
+            try {
+                return Integer.parseInt(input.readLine());
+            } catch (Exception e) {
+                System.out.println("Ingrese un número entero válido");
+            }
+        } while (true);
+    }
+
+    public static String leerString(BufferedReader input){
+        do {
+            try {
+                return input.readLine();
+            }catch (Exception e){
+                System.out.println("Ingrese carcteres valido");
+            }
+
+        }while (true);
+    }
+
+    public static double leerDouble(BufferedReader input){
+        do {
+            try {
+                return Double.parseDouble(input.readLine());
+            }catch (Exception e){
+                System.out.println("Ingrese el decimal de manera correcta");
+            }
+        }while (true);
+    }
+
+    public static LocalDate LeerFecha(BufferedReader input){
+        do {
+            try {
+                return LocalDate.parse(input.readLine());
+            }catch (Exception e){
+                System.out.println("Ingrese la fecha correctamente");
+            }
+        }while (true);
+    }
 
     //Verificacion si ya existe un moderador
     public static boolean existeMod(ArrayList<Usuario> usuarios) {
@@ -62,19 +103,19 @@ public class main {
         } else {
             System.out.println("---REGISTRO MODERADOR---");
             System.out.println("Ingrese el nombre:");
-            String nombreMod = input.readLine();
+            String nombreMod = leerString(input);
 
             System.out.println("Ingrese su apellido");
-            String apellido = input.readLine();
+            String apellido = leerString(input);
 
             System.out.println("Ingrese su fecha de nacimiento con el siguiente fommato AAAA-MM-DD");
-            LocalDate fecha = LocalDate.parse(input.readLine());
+            LocalDate fecha = LeerFecha(input);
 
             System.out.println("Ingrese su correo");
-            String correo = input.readLine();
+            String correo = leerString(input);
 
             System.out.println("Ingrese su contraseña");
-            String contraseña = input.readLine();
+            String contraseña =leerString(input);
 
             Moderador moderador = new Moderador(nombreMod, apellido, fecha, contraseña, correo);
 
@@ -99,38 +140,38 @@ public class main {
                 System.out.println("6. Listar Ofertas");
                 System.out.println("0. Salir");
 
-                opcionElegida = Integer.parseInt(input.readLine());
+                opcionElegida = leerEntero(input);
 
                 switch (opcionElegida) {
                     case 1:
                         //caso del registro usuarios
                         System.out.println("--- REGISTRO DE USUARIOS ---");
                         System.out.println("Cual usuario deseas ser?  \n 1. Vendedor \n 2. Coleccionista");
-                        int opcUsuario = Integer.parseInt(input.readLine());
+                        int opcUsuario = leerEntero(input);
 
                         switch (opcUsuario) {
                             case 1:
 
                                 System.out.println("Ingrese el nombre:");
-                                String nombreVendedor = input.readLine();
+                                String nombreVendedor = leerString(input);
 
                                 System.out.println("Ingrese su apellido");
-                                String apellidoVendedor = input.readLine();
+                                String apellidoVendedor = leerString(input);
 
                                 System.out.println("Ingrese su fecha de nacimiento con el siguiente fommato AAAA-MM-DD");
-                                LocalDate fechaVendedor = LocalDate.parse(input.readLine());
+                                LocalDate fechaVendedor = LeerFecha(input);
 
                                 System.out.println("Ingrese su correo");
-                                String correoVendedor = input.readLine();
+                                String correoVendedor = leerString(input);
 
                                 System.out.println("Ingrese su contraseña");
-                                String contraseñaVendedor = input.readLine();
+                                String contraseñaVendedor = leerString(input);
 
                                 System.out.println("Ingrese su puntuacion del 1-10");
-                                int puntuacionVendedor = Integer.parseInt(input.readLine());
+                                int puntuacionVendedor = leerEntero(input);;
 
                                 System.out.println("Ingrese su direccion");
-                                String direccionVendedor = input.readLine();
+                                String direccionVendedor = leerString(input);
 
                                 Vendedor vendedor = new Vendedor(nombreVendedor, apellidoVendedor, fechaVendedor, correoVendedor
                                         , contraseñaVendedor, puntuacionVendedor, direccionVendedor);
@@ -148,25 +189,25 @@ public class main {
                             case 2:
 
                                 System.out.println("Ingrese el nombre:");
-                                String nombreColeccionista = input.readLine();
+                                String nombreColeccionista = leerString(input);
 
                                 System.out.println("Ingrese su apellido");
-                                String apellidoColecionista = input.readLine();
+                                String apellidoColecionista = leerString(input);
 
                                 System.out.println("Ingrese su fecha de nacimiento con el siguiente fommato AAAA-MM-DD");
-                                LocalDate fechaColecionista = LocalDate.parse(input.readLine());
+                                LocalDate fechaColecionista = LeerFecha(input);
 
                                 System.out.println("Ingrese su correo");
-                                String correoColecionista = input.readLine();
+                                String correoColecionista = leerString(input);
 
                                 System.out.println("Ingrese su contraseña");
-                                String contraseñaColecionista = input.readLine();
+                                String contraseñaColecionista = leerString(input);
 
                                 System.out.println("Ingrese su puntuacion del 1-10");
-                                int puntuacionColecionista = Integer.parseInt(input.readLine());
+                                int puntuacionColecionista = leerEntero(input);;
 
                                 System.out.println("Ingrese su direccion");
-                                String direccionColecionista = input.readLine();
+                                String direccionColecionista = leerString(input);
 
 
 
@@ -175,28 +216,28 @@ public class main {
                                 ArrayList<Objeto> objColeccionista = new ArrayList<>();
 
                                 System.out.print("¿Cuántos objetos desea agregar a su colección? ");
-                                int cantObjetos = Integer.parseInt(input.readLine());
+                                int cantObjetos = leerEntero(input);;
 
                                 for (int i = 0; i < cantObjetos; i++) {
                                     System.out.println("\nObjeto " + (i + 1));
 
                                     System.out.print("Nombre: ");
-                                    String nombreObj = input.readLine();
+                                    String nombreObj = leerString(input);
 
                                     System.out.print("Descripción: ");
-                                    String descObj = input.readLine();
+                                    String descObj = leerString(input);
 
                                     System.out.print("Estado: ");
-                                    String estadoObj = input.readLine();
+                                    String estadoObj = leerString(input);
 
                                     System.out.print("Año de Compra: ");
-                                    int yearObj = Integer.parseInt(input.readLine());
+                                    int yearObj = leerEntero(input);;
 
                                     System.out.print("Mes de Compra: ");
-                                    int mesObj = Integer.parseInt(input.readLine());
+                                    int mesObj = leerEntero(input);;
 
                                     System.out.print("Día de Compra: ");
-                                    int diaObj = Integer.parseInt(input.readLine());
+                                    int diaObj = leerEntero(input);;
 
                                     LocalDate fechaCompraObj = LocalDate.of(yearObj, mesObj, diaObj);
                                     objColeccionista.add(new Objeto(nombreObj, descObj, estadoObj, fechaCompraObj));
@@ -226,11 +267,11 @@ public class main {
                                     }
 
                                     System.out.print("¿Cuántos intereses desea agregar? ");
-                                    int cantIntereses = Integer.parseInt(input.readLine());
+                                    int cantIntereses = leerEntero(input);;
 
                                     for (int i = 0; i < cantIntereses; i++) {
                                         System.out.print("Seleccione el índice del objeto de interés: ");
-                                        int indiceInteres = Integer.parseInt(input.readLine());
+                                        int indiceInteres =leerEntero(input);;
 
                                         if (indiceInteres < 0 || indiceInteres >= objetosDisponibles.size()) {
                                             System.out.println("Índice inválido, se omite.");
@@ -284,15 +325,15 @@ public class main {
 
                         // Pide al usuario los datos por medio de consola
                         System.out.print("Precio Mínimo: ");
-                        double precioMinimo = Double.parseDouble(input.readLine());
+                        double precioMinimo = leerDouble(input);
 
                         System.out.print("Días Hasta que Cierre la Subasta: ");
-                        int dias = Integer.parseInt(input.readLine());
+                        int dias = leerEntero(input);;
 
                         LocalDateTime fechaVencimiento = LocalDateTime.now().plusDays(dias);
 
                         System.out.print("¿Cuántos Objetos Desea Agregar? ");
-                        int cantidadObjetos = Integer.parseInt(input.readLine());
+                        int cantidadObjetos = leerEntero(input);
 
                         // Regla 6: No se puede crear subasta sin objetos
                         if (cantidadObjetos <= 0) {
@@ -307,22 +348,22 @@ public class main {
                             System.out.println("\nObjeto Número " + (i + 1));
 
                             System.out.print("Nombre: ");
-                            String nombre = input.readLine();
+                            String nombre = leerString(input);
 
                             System.out.print("Descripción: ");
-                            String descripcion = input.readLine();
+                            String descripcion = leerString(input);
 
                             System.out.print("Estado: ");
-                            String estado = input.readLine();
+                            String estado = leerString(input);
 
                             System.out.print("Año de Compra: ");
-                            int year = Integer.parseInt(input.readLine());
+                            int year = leerEntero(input);
 
                             System.out.print("Mes de Compra: ");
-                            int mes = Integer.parseInt(input.readLine());
+                            int mes = leerEntero(input);;
 
                             System.out.print("Día de Compra: ");
-                            int dia = Integer.parseInt(input.readLine());
+                            int dia = leerEntero(input);;
 
                             LocalDate fechaCompra = LocalDate.of(year, mes, dia);
 
@@ -337,7 +378,7 @@ public class main {
                             System.out.println(i + ". " + u.getNombre() + " " + u.getApellido());
                         }
 
-                        int indiceUsuario = Integer.parseInt(input.readLine());
+                        int indiceUsuario = leerEntero(input);
 
                         if (indiceUsuario < 0 || indiceUsuario >= usuarios.size()) {
                             System.out.println("Índice inválido.");
@@ -433,7 +474,7 @@ public class main {
                             System.out.println(i + ". " + coleccionistas.get(i).getNombre());
                         }
 
-                        int opcColeccionista = Integer.parseInt(input.readLine());
+                        int opcColeccionista = leerEntero(input);
 
                         // Validar que el índice esté dentro del rango
                         if (opcColeccionista < 0 || opcColeccionista >= coleccionistas.size()) {
@@ -456,7 +497,7 @@ public class main {
                             System.out.println(i + ". " + gestorSubastas.getSubastas().get(i));
                         }
 
-                        int indice = Integer.parseInt(input.readLine());
+                        int indice = leerEntero(input);
 
                         Subasta subastaSeleccionadaOferta = gestorSubastas.getSubastas().get(indice);
 
@@ -471,7 +512,7 @@ public class main {
                         }
 
                         System.out.println("Ingrese el precio ofertado:");
-                        double precio = Double.parseDouble(input.readLine());
+                        double precio = leerDouble(input);
                         try {
                             if (subastaSeleccionadaOferta.getPrecioMinimo() > precio){
                                 throw new OfertaInvalidaException("No se puede ofertar menos que el precio minimo");
@@ -502,7 +543,7 @@ public class main {
                             System.out.println(i + ". " + gestorSubastas.getSubastas().get(i));
                         }
 
-                        int indiceSubasta = Integer.parseInt(input.readLine());
+                        int indiceSubasta = leerEntero(input);
 
                         Subasta subastaSeleccionada =
                                 gestorSubastas.getSubastas().get(indiceSubasta);
