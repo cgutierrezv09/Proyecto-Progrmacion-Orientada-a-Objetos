@@ -1,18 +1,20 @@
 package cr.ac.ucenfotec.logica.gestor;
 
 import cr.ac.ucenfotec.logica.excepciones.SubastaInvalidaException;
+import cr.ac.ucenfotec.logica.excepciones.OfertaInvalidaException;
 import cr.ac.ucenfotec.logica.modelo.Oferta;
 import cr.ac.ucenfotec.logica.modelo.Subasta;
 import cr.ac.ucenfotec.logica.modelo.Objeto;
 import cr.ac.ucenfotec.tipoUsuario.Coleccionista;
 import cr.ac.ucenfotec.tipoUsuario.*;
+import cr.ac.ucenfotec.logica.excepciones.UsuarioNoAutorizadoException;
+import cr.ac.ucenfotec.tipoUsuario.Moderador;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GestorSubastas {
 
-    // Aqui se guardan todas las subastas creadas durante la ejecucion del programa
     private ArrayList<Subasta> subastas;
 
     public GestorSubastas() {
@@ -25,15 +27,45 @@ public class GestorSubastas {
                              double precioMinimo,
                              ArrayList<Objeto> objetos) {
 
-        // Si no hay objetos para subastar, no hay subasta
-        try {
-            if (objetos==null || objetos.isEmpty()){
-                throw new SubastaInvalidaException("No puedes crear una subasta sin objetos");
-            }
-        } catch (SubastaInvalidaException e) {
-            System.out.println(e.getMessage());
-            return;
+        // Validar objetos
+        if (objetos == null || objetos.isEmpty()){
+            throw new SubastaInvalidaException("No puedes crear una subasta sin objetos");
         }
+
+        // Moderador no puede crear subastas
+        if (creador instanceof Moderador){
+            throw new UsuarioNoAutorizadoException("El moderador no puede crear subastas");
+        }
+
+        // Coleccionista solo puede usar objetos propios
+        if (creador instanceof Coleccionista){
+
+            Coleccionista c = (Coleccionista) creador;
+
+            if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()){
+                throw new SubastaInvalidaException("El coleccionista no tiene objetos en su colección");
+            }
+
+            for (Objeto o : objetos){
+
+                boolean encontrado = false;
+
+                for (Objeto propio : c.getObjPropiedad()){
+                    if (propio.getNombre().equals(o.getNombre())){
+                        encontrado = true;
+                        break;
+                    }
+                }
+
+                if (!encontrado){
+                    throw new SubastaInvalidaException(
+                            "El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista"
+                    );
+                }
+            }
+        }
+
+        // Crear subasta
         Subasta nueva = new Subasta(fechaVencimiento, creador, precioMinimo);
 
         for (Objeto o : objetos) {
@@ -43,7 +75,7 @@ public class GestorSubastas {
         subastas.add(nueva);
     }
 
-    // Imprime todas las subastas registradas en el sistema
+    // Lista subastas
     public void listarSubastas() {
 
         try {
@@ -59,34 +91,72 @@ public class GestorSubastas {
             System.out.println("--------------------");
             System.out.println(s);
         }
-
     }
 
-    // se crea la oferta desde aca
+    // Crear oferta (VALIDADO)
     public void crearOferta(Coleccionista coleccionista, int indiceSubasta, double precio){
 
-        try {
-            if (subastas.isEmpty()){
-                throw new SubastaInvalidaException("No hay subastas disponibles");
-            }
-
-        }catch (SubastaInvalidaException e){
-            System.out.println(e.getMessage());
-            return;
+        if (subastas.isEmpty()){
+            throw new SubastaInvalidaException("No hay subastas disponibles");
         }
 
+        // Validar índice
+        if (indiceSubasta < 0 || indiceSubasta >= subastas.size()) {
+            throw new SubastaInvalidaException("Índice de subasta inválido");
+        }
 
         Subasta subasta = subastas.get(indiceSubasta);
 
+        // 🔒 Validar estado
+        if (subasta.getEstado().equals("CERRADA")) {
+            throw new OfertaInvalidaException("No se puede ofertar en una subasta cerrada");
+        }
+
+        // 💰 Validar precio mínimo
+        if (precio < subasta.getPrecioMinimo()) {
+            throw new OfertaInvalidaException("El precio ofertado no puede ser menor al precio mínimo de la subasta");
+        }
+
         Oferta oferta = new Oferta(
-                coleccionista.getNombre(),
-                coleccionista.getPuntuacion(),
+                coleccionista,
                 precio
         );
 
         subasta.getOfertas().add(oferta);
 
         System.out.println("Oferta registrada correctamente.");
+    }
+
+    public void cerrarSubasta(int indiceSubasta){
+
+        if (subastas.isEmpty()){
+            throw new SubastaInvalidaException("No hay subastas disponibles");
+        }
+
+        if (indiceSubasta < 0 || indiceSubasta >= subastas.size()) {
+            throw new SubastaInvalidaException("Índice de subasta inválido");
+        }
+
+        Subasta subasta = subastas.get(indiceSubasta);
+
+        if (subasta.getEstado().equals("CERRADA")){
+            System.out.println("La subasta ya está cerrada.");
+            return;
+        }
+
+        subasta.cerrarSubasta();
+
+        System.out.println("Subasta cerrada correctamente.");
+
+        // Ganador
+        Oferta ganadora = subasta.getOfertaGanadora();
+
+        if (ganadora == null) {
+            System.out.println("La subasta terminó sin ofertas.");
+        } else {
+            System.out.println("Oferta ganadora:");
+            System.out.println(ganadora);
+        }
     }
 
     public ArrayList<Subasta> getSubastas() {

@@ -28,6 +28,23 @@ public class Subasta {
         objetos = new ArrayList<>();
     }
 
+    public Oferta getOfertaGanadora() {
+
+        if (ofertas.isEmpty()) {
+            return null;
+        }
+
+        Oferta mejor = ofertas.get(0);
+
+        for (Oferta o : ofertas) {
+            if (o.getPrecioOferta() > mejor.getPrecioOferta()) {
+                mejor = o;
+            }
+        }
+
+        return mejor;
+    }
+
     // A traves de los datos proporcionados por el usuario y la fecha actual, calcula el tiempo en subasta
     public Duration calcularTiempoRestante() {
 
@@ -56,6 +73,10 @@ public class Subasta {
 
     public double getPrecioMinimo() {
         return precioMinimo;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 
     //getter para la oferta

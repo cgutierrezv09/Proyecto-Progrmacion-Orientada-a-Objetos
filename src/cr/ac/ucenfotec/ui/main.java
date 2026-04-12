@@ -2,6 +2,7 @@ package cr.ac.ucenfotec.ui;
 
 import cr.ac.ucenfotec.logica.excepciones.EdadInsuficienteException;
 import cr.ac.ucenfotec.logica.excepciones.OfertaInvalidaException;
+import cr.ac.ucenfotec.logica.excepciones.SubastaInvalidaException;
 import cr.ac.ucenfotec.logica.excepciones.UsuarioNoAutorizadoException;
 import cr.ac.ucenfotec.tipoUsuario.*;
 import cr.ac.ucenfotec.logica.gestor.GestorSubastas;
@@ -138,6 +139,7 @@ public class main {
                 System.out.println("4. Listar Subastas");
                 System.out.println("5. Crear Oferta");
                 System.out.println("6. Listar Ofertas");
+                System.out.println("7. Cerrar Subasta");
                 System.out.println("0. Salir");
 
                 opcionElegida = leerEntero(input);
@@ -390,42 +392,6 @@ public class main {
                         // Regla 3: El moderador no puede crear subastas
 
                         try {
-                            if (creador instanceof  Moderador){
-                                throw new UsuarioNoAutorizadoException("El moderador no puede crear ni participar en subastas");
-                            }
-                            // Regla 9: Si es coleccionista, los objetos deben pertenecer a su colección
-                            if (creador instanceof Coleccionista) {
-
-                                Coleccionista c = (Coleccionista) creador;
-
-                                if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()) {
-                                    System.out.println("El coleccionista no tiene objetos registrados en su colección.");
-                                    break;
-                                }
-
-                                boolean objetosValidos = true;
-
-                                for (Objeto o : objetos) {
-
-                                    boolean encontrado = false;
-
-                                    for (Objeto objPropio : c.getObjPropiedad()) {
-                                        if (objPropio.getNombre().equals(o.getNombre())) {
-                                            encontrado = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (!encontrado) {
-                                        System.out.println("El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
-                                        objetosValidos = false;
-                                        break;
-                                    }
-                                }
-
-                                if (!objetosValidos) break;
-                            }
-
                             gestorSubastas.crearSubasta(
                                     fechaVencimiento,
                                     creador,
@@ -434,7 +400,8 @@ public class main {
                             );
 
                             System.out.println("Subasta creada correctamente por " + creador.getNombre());
-                        }catch (UsuarioNoAutorizadoException e){
+
+                        } catch (UsuarioNoAutorizadoException | SubastaInvalidaException e){
                             System.out.println(e.getMessage());
                         }
 
@@ -455,7 +422,6 @@ public class main {
                         System.out.println("\n--- CREAR OFERTA ---");
                         System.out.println("Seleccione el coleccionista:");
 
-                        // Lista separada solo con coleccionistas
                         ArrayList<Coleccionista> coleccionistas = new ArrayList<>();
 
                         for (Usuario u : usuarios) {
@@ -469,28 +435,24 @@ public class main {
                             break;
                         }
 
-                        // Mostrar solo coleccionistas con índices propios
                         for (int i = 0; i < coleccionistas.size(); i++) {
                             System.out.println(i + ". " + coleccionistas.get(i).getNombre());
                         }
 
                         int opcColeccionista = leerEntero(input);
 
-                        // Validar que el índice esté dentro del rango
                         if (opcColeccionista < 0 || opcColeccionista >= coleccionistas.size()) {
-                            System.out.println("Opción inválida. Solo los coleccionistas pueden hacer ofertas.");
+                            System.out.println("Opción inválida.");
                             break;
                         }
 
                         Coleccionista coleccionista = coleccionistas.get(opcColeccionista);
 
-                        // Verificar que existan subastas
                         if (gestorSubastas.getSubastas().isEmpty()) {
                             System.out.println("No hay subastas disponibles.");
                             break;
                         }
 
-                        // Mostrar subastas
                         System.out.println("Seleccione la subasta:");
 
                         for (int i = 0; i < gestorSubastas.getSubastas().size(); i++) {
@@ -513,17 +475,13 @@ public class main {
 
                         System.out.println("Ingrese el precio ofertado:");
                         double precio = leerDouble(input);
+
                         try {
-                            if (subastaSeleccionadaOferta.getPrecioMinimo() > precio){
-                                throw new OfertaInvalidaException("No se puede ofertar menos que el precio minimo");
-                            }
                             gestorSubastas.crearOferta(coleccionista, indice, precio);
                             System.out.println("Oferta creada correctamente.");
-                        }catch (OfertaInvalidaException e){
+                        } catch (OfertaInvalidaException e){
                             System.out.println(e.getMessage());
                         }
-
-
 
                         break;
 
@@ -559,6 +517,29 @@ public class main {
                                 System.out.println(oferta);
                                 System.out.println("-------------------");
                             }
+                        }
+
+                        break;
+                    case 7:
+                        System.out.println("\n--- CERRAR SUBASTA ---");
+
+                        if (gestorSubastas.getSubastas().isEmpty()) {
+                            System.out.println("No hay subastas disponibles.");
+                            break;
+                        }
+
+                        System.out.println("Seleccione la subasta a cerrar:");
+
+                        for (int i = 0; i < gestorSubastas.getSubastas().size(); i++) {
+                            System.out.println(i + ". " + gestorSubastas.getSubastas().get(i));
+                        }
+
+                        int indiceCerrar = leerEntero(input);
+
+                        try {
+                            gestorSubastas.cerrarSubasta(indiceCerrar);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
                         }
 
                         break;

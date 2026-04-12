@@ -1,50 +1,42 @@
 package cr.ac.ucenfotec.logica.modelo;
 
+import cr.ac.ucenfotec.tipoUsuario.Coleccionista;
+
 public class Oferta {
 
-    private String nombreOferente;
-    private int puntuacionOferente;
+    private Coleccionista oferente;
     private double precioOferta;
 
-    //Constructor
-    public Oferta(String nombreOferente, int puntuacionOferente, double precioOferta) {
-        this.nombreOferente = nombreOferente;
-        this.puntuacionOferente = puntuacionOferente;
+    // Constructor
+    public Oferta(Coleccionista oferente, double precioOferta) {
+        this.oferente = oferente;
         this.precioOferta = precioOferta;
     }
 
-    //getters
-
-    public String getNombreOferente() {
-        return nombreOferente;
-    }
-
-    public int getPuntuacionOferente() {
-        return puntuacionOferente;
+    // Getters
+    public Coleccionista getOferente() {
+        return oferente;
     }
 
     public double getPrecioOferta() {
         return precioOferta;
     }
 
-    //setters
-
-    public void setNombreOferente(String nombreOferente) {
-        this.nombreOferente = nombreOferente;
-    }
-
-    public void setPuntuacionOferente(int puntuacionOferente) {
-        this.puntuacionOferente = puntuacionOferente;
+    // Setters
+    public void setOferente(Coleccionista oferente) {
+        this.oferente = oferente;
     }
 
     public void setPrecioOferta(double precioOferta) {
         this.precioOferta = precioOferta;
     }
 
-
     @Override
     public String toString() {
         return "Oferta{" +
-                "nombreOferente=" + nombreOferente + "\n puntuacionOferente=" + puntuacionOferente + " \n precioOferta=" + precioOferta ;
+                "oferente=" + oferente.getNombre() +
+                ", puntuacion=" + oferente.getPuntuacion() +
+                ", precioOferta=" + precioOferta +
+                '}';
     }
 }
