@@ -1,4 +1,4 @@
-package cr.ac.ucenfotec.logica.excepciones;
+package cr.ac.ucenfotec.bl.exception;
 
 public class OfertaInvalidaException extends RuntimeException {
     public OfertaInvalidaException(String message) {

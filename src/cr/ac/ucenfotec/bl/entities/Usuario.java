@@ -1,6 +1,6 @@
-package cr.ac.ucenfotec.tipoUsuario;
+package cr.ac.ucenfotec.bl.entities;
 
-import cr.ac.ucenfotec.logica.excepciones.EdadInsuficienteException;
+import cr.ac.ucenfotec.bl.exception.EdadInsuficienteException;
 
 import java.time.LocalDate;
 import java.time.Period;

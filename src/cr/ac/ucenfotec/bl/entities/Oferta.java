@@ -1,6 +1,4 @@
-package cr.ac.ucenfotec.logica.modelo;
-
-import cr.ac.ucenfotec.tipoUsuario.Coleccionista;
+package cr.ac.ucenfotec.bl.entities;
 
 public class Oferta {
 

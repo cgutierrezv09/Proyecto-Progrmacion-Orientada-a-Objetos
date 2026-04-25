@@ -1,5 +1,4 @@
-package cr.ac.ucenfotec.tipoUsuario;
-import cr.ac.ucenfotec.logica.modelo.Objeto;
+package cr.ac.ucenfotec.bl.entities;
 
 
 import java.time.LocalDate;

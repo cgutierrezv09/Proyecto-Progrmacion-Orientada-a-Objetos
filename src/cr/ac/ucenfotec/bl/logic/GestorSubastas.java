@@ -1,14 +1,9 @@
-package cr.ac.ucenfotec.logica.gestor;
+package cr.ac.ucenfotec.bl.logic;
 
-import cr.ac.ucenfotec.logica.excepciones.SubastaInvalidaException;
-import cr.ac.ucenfotec.logica.excepciones.OfertaInvalidaException;
-import cr.ac.ucenfotec.logica.modelo.Oferta;
-import cr.ac.ucenfotec.logica.modelo.Subasta;
-import cr.ac.ucenfotec.logica.modelo.Objeto;
-import cr.ac.ucenfotec.tipoUsuario.Coleccionista;
-import cr.ac.ucenfotec.tipoUsuario.*;
-import cr.ac.ucenfotec.logica.excepciones.UsuarioNoAutorizadoException;
-import cr.ac.ucenfotec.tipoUsuario.Moderador;
+import cr.ac.ucenfotec.bl.entities.*;
+import cr.ac.ucenfotec.bl.exception.SubastaInvalidaException;
+import cr.ac.ucenfotec.bl.exception.OfertaInvalidaException;
+import cr.ac.ucenfotec.bl.exception.UsuarioNoAutorizadoException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

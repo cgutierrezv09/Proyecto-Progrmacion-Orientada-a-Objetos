@@ -1,18 +1,18 @@
-package cr.ac.ucenfotec.ui;
+package cr.ac.ucenfotec;
 
-import cr.ac.ucenfotec.logica.excepciones.EdadInsuficienteException;
-import cr.ac.ucenfotec.logica.excepciones.OfertaInvalidaException;
-import cr.ac.ucenfotec.logica.excepciones.SubastaInvalidaException;
-import cr.ac.ucenfotec.logica.excepciones.UsuarioNoAutorizadoException;
-import cr.ac.ucenfotec.tipoUsuario.*;
-import cr.ac.ucenfotec.logica.gestor.GestorSubastas;
-import cr.ac.ucenfotec.logica.modelo.Objeto;
-import cr.ac.ucenfotec.logica.modelo.Subasta;
+import cr.ac.ucenfotec.bl.entities.*;
+import cr.ac.ucenfotec.bl.exception.EdadInsuficienteException;
+import cr.ac.ucenfotec.bl.exception.OfertaInvalidaException;
+import cr.ac.ucenfotec.bl.exception.SubastaInvalidaException;
+import cr.ac.ucenfotec.bl.exception.UsuarioNoAutorizadoException;
+import cr.ac.ucenfotec.bl.logic.GestorSubastas;
+import cr.ac.ucenfotec.ui.Menu;
 //Leer datos
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 //Gestionar fechas y periodos de tiempo
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 //Guardar objetos y subastas localmente
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class main {
 
 
-    //verifiacion de los datos
+    /*verifiacion de los datos
     public static int leerEntero(BufferedReader input) {
         do {
             try {
@@ -86,13 +86,14 @@ public class main {
                 System.out.println(u);
                 System.out.println("--------------------");
             }
-    }
+    }*/
 
 
+    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
 
-    public static void main(String[] args) throws IOException {
+        Menu.menuPrincipal();
 
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        /*BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         GestorSubastas gestorSubastas = new GestorSubastas();
 
         int opcionElegida;
@@ -550,5 +551,6 @@ public class main {
 
             } while (opcionElegida != 0);
 
-        }
+        }*/
     }
+}

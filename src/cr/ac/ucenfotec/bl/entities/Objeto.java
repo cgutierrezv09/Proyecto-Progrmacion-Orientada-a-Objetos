@@ -1,4 +1,4 @@
-package cr.ac.ucenfotec.logica.modelo;
+package cr.ac.ucenfotec.bl.entities;
 
 import java.time.LocalDate;
 import java.time.Period;

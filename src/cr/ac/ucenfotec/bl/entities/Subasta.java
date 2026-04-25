@@ -1,9 +1,8 @@
-package cr.ac.ucenfotec.logica.modelo;
+package cr.ac.ucenfotec.bl.entities;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import cr.ac.ucenfotec.tipoUsuario.*;
 
 public class Subasta {
 

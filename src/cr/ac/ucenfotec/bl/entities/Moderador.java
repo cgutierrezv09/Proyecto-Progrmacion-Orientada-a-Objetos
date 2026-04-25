@@ -1,4 +1,4 @@
-package cr.ac.ucenfotec.tipoUsuario;
+package cr.ac.ucenfotec.bl.entities;
 
 import java.time.LocalDate;
 
