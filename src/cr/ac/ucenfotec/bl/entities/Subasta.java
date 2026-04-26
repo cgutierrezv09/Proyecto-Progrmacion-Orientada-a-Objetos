@@ -11,8 +11,7 @@ public class Subasta {
     private double precioMinimo;
     private ArrayList<Objeto> objetos;
     private String estado;
-    ArrayList<Oferta> ofertas = new ArrayList<>();  // aca se ingresan las ofertas de las subastas
-    private int id;
+    private ArrayList<Oferta> ofertas = new ArrayList<>();
 
     // Constructor por Defecto
     public Subasta() {
@@ -29,82 +28,35 @@ public class Subasta {
     }
 
     public Oferta getOfertaGanadora() {
-
-        if (ofertas.isEmpty()) {
-            return null;
-        }
-
+        if (ofertas.isEmpty()) return null;
         Oferta mejor = ofertas.get(0);
-
         for (Oferta o : ofertas) {
             if (o.getPrecioOferta() > mejor.getPrecioOferta()) {
                 mejor = o;
             }
         }
-
         return mejor;
     }
 
-    // A traves de los datos proporcionados por el usuario y la fecha actual, calcula el tiempo en subasta
     public Duration calcularTiempoRestante() {
-
         return Duration.between(LocalDateTime.now(), fechaVencimiento);
-
     }
 
-    // Cambia el estado de la subasta
-    public void cerrarSubasta() {
-        estado = "CERRADA";
-    }
+    public void cerrarSubasta() { estado = "CERRADA"; }
 
-    // Getters, algunos de los setters se hacen a partir de consola
+    public void agregarObjeto(Objeto obj) { objetos.add(obj); }
 
-    public void agregarObjeto(Objeto obj) {
-        objetos.add(obj);
-    }
-
-    public ArrayList<Objeto> getObjetos() {
-        return objetos;
-    }
-
-    public Usuario getCreador() {
-        return creador;
-    }
-
-    public double getPrecioMinimo() {
-        return precioMinimo;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    //getter para la oferta
-    public ArrayList<Oferta> getOfertas(){
-        return ofertas;
-    }
-
-    public LocalDateTime getFechaVencimiento() {
-        return fechaVencimiento;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    // Getters
+    public LocalDateTime getFechaVencimiento() { return fechaVencimiento; }
+    public ArrayList<Objeto> getObjetos() { return objetos; }
+    public Usuario getCreador() { return creador; }
+    public double getPrecioMinimo() { return precioMinimo; }
+    public String getEstado() { return estado; }
+    public ArrayList<Oferta> getOfertas() { return ofertas; }
 
     @Override
     public String toString() {
-
         Duration restante = calcularTiempoRestante();
-
         return "Subasta creada por: " + creador.getNombre() +
                 "\nPrecio minimo: " + precioMinimo +
                 "\nEstado: " + estado +

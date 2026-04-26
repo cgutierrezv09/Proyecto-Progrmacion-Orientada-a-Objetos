@@ -35,4 +35,13 @@ public class DAOColeccionista {
 
         return "El coleccionista se registró con éxito.";
     }
+
+    public static int obtenerIdPorCorreo(String correo) throws SQLException, IOException, ClassNotFoundException {
+        query = "SELECT id FROM t_usuarios WHERE correo = '" + correo + "'";
+        ResultSet resultado = Conector.getConexion().ejecutarQuery(query);
+        if (resultado.next()) {
+            return resultado.getInt("id");
+        }
+        return -1;
+    }
 }

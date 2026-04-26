@@ -1,6 +1,6 @@
 package cr.ac.ucenfotec.ti;
 
-import cr.ac.ucenfotec.bl.entities.Subasta;
+import cr.ac.ucenfotec.bl.entities.Objeto;
 import cr.ac.ucenfotec.bl.entities.Usuario;
 import cr.ac.ucenfotec.bl.exception.EdadInsuficienteException;
 import cr.ac.ucenfotec.bl.logic.*;
@@ -59,7 +59,7 @@ public class Controlador {
         } while (true);
     }
 
-    // --- Métodos de negocio delegados a gestores ---
+    // --- Métodos de negocio ---
 
     public static boolean registrarMod() throws SQLException, IOException, ClassNotFoundException {
         if (GestorModerador.existeMod()) return true;
@@ -132,8 +132,36 @@ public class Controlador {
                 String direccionC = leerString(input);
 
                 try {
+                    // Registrar el coleccionista
                     System.out.println(GestorColeccionista.registrarColeccionista(
                             nombreC, apellidoC, fechaC, contrasenaC, correoC, puntuacionC, direccionC));
+
+                    // Obtener el id del coleccionista recien registrado
+                    int idColeccionista = GestorColeccionista.obtenerIdPorCorreo(correoC);
+
+                    // Pedir los objetos del coleccionista
+                    System.out.println("¿Cuántos objetos desea agregar a su colección?");
+                    int cantObjetos = leerEntero(input);
+
+                    for (int i = 0; i < cantObjetos; i++) {
+                        System.out.println("\nObjeto " + (i + 1));
+
+                        System.out.print("Nombre: ");
+                        String nombreObj = leerString(input);
+
+                        System.out.print("Descripción: ");
+                        String descObj = leerString(input);
+
+                        System.out.print("Estado: ");
+                        String estadoObj = leerString(input);
+
+                        System.out.print("Fecha de compra (AAAA-MM-DD): ");
+                        LocalDate fechaCompra = leerFecha(input);
+
+                        Objeto obj = new Objeto(nombreObj, descObj, estadoObj, fechaCompra);
+                        System.out.println(GestorObjeto.registrarObjeto(obj, idColeccionista));
+                    }
+
                 } catch (EdadInsuficienteException e) {
                     System.out.println(e.getMessage());
                 }

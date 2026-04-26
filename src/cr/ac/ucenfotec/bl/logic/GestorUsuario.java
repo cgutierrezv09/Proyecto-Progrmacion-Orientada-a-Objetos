@@ -9,9 +9,7 @@ import java.util.ArrayList;
 
 public class GestorUsuario {
 
-    /**
-     * Retorna la lista de todos los usuarios registrados en la base de datos.
-     */
+    // Lista todos los usuarios del sistema
     public static ArrayList<Usuario> listarUsuarios() throws SQLException, IOException, ClassNotFoundException {
         return DAOUsuario.listarUsuarios();
     }

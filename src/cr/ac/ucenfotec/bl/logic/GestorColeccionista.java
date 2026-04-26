@@ -22,4 +22,9 @@ public class GestorColeccionista {
         coleccionista.validarEdad();
         return DAOColeccionista.insertarColeccionista(coleccionista);
     }
+
+    // Obtiene el id de un coleccionista por correo
+    public static int obtenerIdPorCorreo(String correo) throws SQLException, IOException, ClassNotFoundException {
+        return DAOColeccionista.obtenerIdPorCorreo(correo);
+    }
 }
