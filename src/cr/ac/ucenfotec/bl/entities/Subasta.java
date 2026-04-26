@@ -12,6 +12,7 @@ public class Subasta {
     private ArrayList<Objeto> objetos;
     private String estado;
     ArrayList<Oferta> ofertas = new ArrayList<>();  // aca se ingresan las ofertas de las subastas
+    private int id;
 
     // Constructor por Defecto
     public Subasta() {
@@ -78,9 +79,25 @@ public class Subasta {
         return estado;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     //getter para la oferta
     public ArrayList<Oferta> getOfertas(){
         return ofertas;
+    }
+
+    public LocalDateTime getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @Override

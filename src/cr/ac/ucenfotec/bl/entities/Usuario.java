@@ -15,12 +15,20 @@ public abstract class Usuario {
     protected   String contraseña;
     protected String correo;
 
+    protected int id;
+
     //constructor
     public Usuario(String nombre, String apellido, LocalDate fechaNacimiento, String contraseña, String correo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
         this.contraseña = contraseña;
+        this.correo = correo;
+    }
+
+    public Usuario(String nombre, String apellido, String correo) {
+        this.nombre = nombre;
+        this.apellido = apellido;
         this.correo = correo;
     }
 
@@ -48,6 +56,12 @@ public abstract class Usuario {
         return correo;
     }
 
+    public int getId() {
+        return id;
+    }
+
+
+
     //Setters
 
     public void setNombre(String nombre) {
@@ -70,6 +84,10 @@ public abstract class Usuario {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     //metodo para calcular la edad

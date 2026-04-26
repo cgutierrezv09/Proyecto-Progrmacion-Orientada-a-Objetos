@@ -16,6 +16,10 @@ public class Vendedor extends Usuario {
         this.direccion=direccion;
     }
 
+    public Vendedor(String nombre, String apellido, String correo) {
+        super(nombre, apellido, correo);
+    }
+
     //Getters
 
     public int getPuntuacion() {

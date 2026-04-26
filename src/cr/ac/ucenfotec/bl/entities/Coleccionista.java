@@ -24,6 +24,12 @@ public class Coleccionista extends Usuario {
         this.objPropiedad = objPropiedad;
     }
 
+    public Coleccionista(String nombre, String apellido, String correo) {
+        super(nombre, apellido, correo);
+        this.listInteres = new ArrayList<>();
+        this.objPropiedad = new ArrayList<>();
+    }
+
     //Getters
 
     public int getPuntuacion() {

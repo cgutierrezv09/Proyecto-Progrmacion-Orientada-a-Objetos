@@ -30,4 +30,12 @@ public class AccesoDB {
         return preparedStatement.executeQuery();
     }
 
+    public ResultSet ejecutarQuery(String query, Object... parametros) throws SQLException {
+        preparedStatement = conexion.prepareStatement(query);
+        for (int i = 0; i < parametros.length; i++) {
+            preparedStatement.setObject(i + 1, parametros[i]);
+        }
+        return preparedStatement.executeQuery();
+    }
+
 }

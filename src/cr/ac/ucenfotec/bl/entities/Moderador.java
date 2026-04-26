@@ -11,6 +11,10 @@ public class Moderador extends Usuario {
         super(nombre, apellido, fechaNacimiento, contraseña, correo);
     }
 
+    public Moderador(String nombre, String apellido, String correo) {
+        super(nombre, apellido, correo);
+    }
+
     @Override
     public String mostrarRol() {
         return "Moderador";

@@ -1,160 +1,144 @@
 package cr.ac.ucenfotec.bl.logic;
 
+import cr.ac.ucenfotec.bl.dao.DAOSubasta;
+import cr.ac.ucenfotec.bl.dao.DAOUsuario;
 import cr.ac.ucenfotec.bl.entities.*;
 import cr.ac.ucenfotec.bl.exception.SubastaInvalidaException;
-import cr.ac.ucenfotec.bl.exception.OfertaInvalidaException;
 import cr.ac.ucenfotec.bl.exception.UsuarioNoAutorizadoException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GestorSubastas {
 
-    private ArrayList<Subasta> subastas;
+    /**
+     * Crea y persiste una nueva subasta en la base de datos.
+     */
+    public static String crearSubasta(LocalDateTime fechaVencimiento,
+                                      int idCreador,
+                                      double precioMinimo,
+                                      int cantObjetos,
+                                      BufferedReader input) throws SQLException, IOException, ClassNotFoundException {
 
-    public GestorSubastas() {
-        subastas = new ArrayList<>();
-    }
+        // Buscar el usuario creador en la BD
+        ArrayList<Usuario> usuarios = DAOUsuario.listarUsuarios();
+        Usuario creador = null;
+        for (Usuario u : usuarios) {
+            if (u.getId() == idCreador) {
+                creador = u;
+                break;
+            }
+        }
 
-    // Crea la subasta
-    public void crearSubasta(LocalDateTime fechaVencimiento,
-                             Usuario creador,
-                             double precioMinimo,
-                             ArrayList<Objeto> objetos) {
-
-        // Validar objetos
-        if (objetos == null || objetos.isEmpty()){
-            throw new SubastaInvalidaException("No puedes crear una subasta sin objetos");
+        if (creador == null) {
+            throw new SubastaInvalidaException("No se encontró un usuario con ese ID.");
         }
 
         // Moderador no puede crear subastas
-        if (creador instanceof Moderador){
-            throw new UsuarioNoAutorizadoException("El moderador no puede crear subastas");
+        if (creador instanceof Moderador) {
+            throw new UsuarioNoAutorizadoException("El moderador no puede crear subastas.");
+        }
+
+        // Capturar objetos
+        ArrayList<Objeto> objetos = new ArrayList<>();
+        for (int i = 0; i < cantObjetos; i++) {
+            System.out.println("Objeto " + (i + 1));
+            System.out.println("Nombre:");
+            String nombre = input.readLine();
+            System.out.println("Descripción:");
+            String descripcion = input.readLine();
+            System.out.println("Estado:");
+            String estado = input.readLine();
+            System.out.println("Fecha de compra (AAAA-MM-DD):");
+            LocalDate fechaCompra = LocalDate.parse(input.readLine());
+            objetos.add(new Objeto(nombre, descripcion, estado, fechaCompra));
+        }
+
+        if (objetos.isEmpty()) {
+            throw new SubastaInvalidaException("No puedes crear una subasta sin objetos.");
         }
 
         // Coleccionista solo puede usar objetos propios
-        if (creador instanceof Coleccionista){
-
+        if (creador instanceof Coleccionista) {
             Coleccionista c = (Coleccionista) creador;
-
-            if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()){
-                throw new SubastaInvalidaException("El coleccionista no tiene objetos en su colección");
+            if (c.getObjPropiedad() == null || c.getObjPropiedad().isEmpty()) {
+                throw new SubastaInvalidaException("El coleccionista no tiene objetos en su colección.");
             }
-
-            for (Objeto o : objetos){
-
+            for (Objeto o : objetos) {
                 boolean encontrado = false;
-
-                for (Objeto propio : c.getObjPropiedad()){
-                    if (propio.getNombre().equals(o.getNombre())){
+                for (Objeto propio : c.getObjPropiedad()) {
+                    if (propio.getNombre().equals(o.getNombre())) {
                         encontrado = true;
                         break;
                     }
                 }
-
-                if (!encontrado){
+                if (!encontrado) {
                     throw new SubastaInvalidaException(
-                            "El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista"
-                    );
+                            "El objeto '" + o.getNombre() + "' no pertenece a la colección del coleccionista.");
                 }
             }
         }
 
-        // Crear subasta
         Subasta nueva = new Subasta(fechaVencimiento, creador, precioMinimo);
-
         for (Objeto o : objetos) {
             nueva.agregarObjeto(o);
         }
 
-        subastas.add(nueva);
+        return DAOSubasta.insertarSubasta(nueva);
     }
 
-    // Lista subastas
-    public void listarSubastas() {
+    /**
+     * Lista todas las subastas consultando la base de datos.
+     */
+    public static void listarSubastas() throws SQLException, IOException, ClassNotFoundException {
+        ArrayList<Subasta> subastas = DAOSubasta.listarSubastas();
 
-        try {
-            if (subastas.isEmpty()){
-                throw new SubastaInvalidaException("No hay subastas registradas");
-            }
-        } catch (SubastaInvalidaException e) {
-            System.out.println(e.getMessage());
+        if (subastas.isEmpty()) {
+            System.out.println("No hay subastas registradas.");
             return;
         }
 
         for (Subasta s : subastas) {
             System.out.println("--------------------");
+            System.out.println("ID: " + s.getId());
             System.out.println(s);
         }
     }
 
-    // Crear oferta (VALIDADO)
-    public void crearOferta(Coleccionista coleccionista, int indiceSubasta, double precio){
+    /**
+     * Cierra una subasta actualizando su estado en la base de datos.
+     */
+    public static void cerrarSubasta(int idSubasta) throws SQLException, IOException, ClassNotFoundException {
+        ArrayList<Subasta> subastas = DAOSubasta.listarSubastas();
+        Subasta subasta = null;
 
-        if (subastas.isEmpty()){
-            throw new SubastaInvalidaException("No hay subastas disponibles");
+        for (Subasta s : subastas) {
+            if (s.getId() == idSubasta) {
+                subasta = s;
+                break;
+            }
         }
 
-        // Validar índice
-        if (indiceSubasta < 0 || indiceSubasta >= subastas.size()) {
-            throw new SubastaInvalidaException("Índice de subasta inválido");
+        if (subasta == null) {
+            throw new SubastaInvalidaException("No se encontró una subasta con ese ID.");
         }
 
-        Subasta subasta = subastas.get(indiceSubasta);
-
-        // 🔒 Validar estado
         if (subasta.getEstado().equals("CERRADA")) {
-            throw new OfertaInvalidaException("No se puede ofertar en una subasta cerrada");
-        }
-
-        // 💰 Validar precio mínimo
-        if (precio < subasta.getPrecioMinimo()) {
-            throw new OfertaInvalidaException("El precio ofertado no puede ser menor al precio mínimo de la subasta");
-        }
-
-        Oferta oferta = new Oferta(
-                coleccionista,
-                precio
-        );
-
-        subasta.getOfertas().add(oferta);
-
-        System.out.println("Oferta registrada correctamente.");
-    }
-
-    public void cerrarSubasta(int indiceSubasta){
-
-        if (subastas.isEmpty()){
-            throw new SubastaInvalidaException("No hay subastas disponibles");
-        }
-
-        if (indiceSubasta < 0 || indiceSubasta >= subastas.size()) {
-            throw new SubastaInvalidaException("Índice de subasta inválido");
-        }
-
-        Subasta subasta = subastas.get(indiceSubasta);
-
-        if (subasta.getEstado().equals("CERRADA")){
             System.out.println("La subasta ya está cerrada.");
             return;
         }
 
-        subasta.cerrarSubasta();
-
-        System.out.println("Subasta cerrada correctamente.");
-
-        // Ganador
-        Oferta ganadora = subasta.getOfertaGanadora();
-
-        if (ganadora == null) {
-            System.out.println("La subasta terminó sin ofertas.");
-        } else {
-            System.out.println("Oferta ganadora:");
-            System.out.println(ganadora);
-        }
+        System.out.println(DAOSubasta.cerrarSubasta(idSubasta));
     }
 
-    public ArrayList<Subasta> getSubastas() {
-        return subastas;
+    /**
+     * Retorna todas las subastas de la base de datos.
+     */
+    public static ArrayList<Subasta> getSubastas() throws SQLException, IOException, ClassNotFoundException {
+        return DAOSubasta.listarSubastas();
     }
 }

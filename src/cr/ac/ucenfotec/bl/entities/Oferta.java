@@ -4,6 +4,8 @@ public class Oferta {
 
     private Coleccionista oferente;
     private double precioOferta;
+    private int id;
+    private int idSubasta; // para saber a qué subasta pertenece al recuperar de BD
 
     // Constructor
     public Oferta(Coleccionista oferente, double precioOferta) {
@@ -20,6 +22,14 @@ public class Oferta {
         return precioOferta;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public int getIdSubasta() {
+        return idSubasta;
+    }
+
     // Setters
     public void setOferente(Coleccionista oferente) {
         this.oferente = oferente;
@@ -27,6 +37,14 @@ public class Oferta {
 
     public void setPrecioOferta(double precioOferta) {
         this.precioOferta = precioOferta;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setIdSubasta(int idSubasta) {
+        this.idSubasta = idSubasta;
     }
 
     @Override
